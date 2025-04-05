@@ -1,0 +1,6 @@
+<h2>Boletim</h2>
+<ul>
+  {% for avaliacao in avaliacoes %}
+    <li>Média: {{ avaliacao.media }} | Faltas: {{ avaliacao.faltas }} | Status: {{ avaliacao.status }}</li>
+  {% endfor %}
+</ul>
