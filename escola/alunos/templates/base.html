@@ -1,38 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Avaliação{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div class="container">
-        <div class="nav-links">
-            {% if user.is_authenticated %}
-                {% if user.professor %}
-                    <a href="{% url 'dashboard_professor' %}">Dashboard</a>
-                    <a href="{% url 'lancar_avaliacao' %}">Lançar Avaliação</a>
-                {% elif user.aluno %}
-                    <a href="{% url 'boletim_aluno' %}">Meu Boletim</a>
-                {% endif %}
-                <a href="{% url 'logout' %}">Sair</a>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'cadastro_aluno' %}">Cadastrar como Aluno</a>
-                <a href="{% url 'cadastro_professor' %}">Cadastrar como Professor</a>
-            {% endif %}
-        </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="{% url 'home' %}" class="logo">Sistema de Avaliação</a>
+                <div class="nav-links">
+                    {% if user.is_authenticated %}
+                        {% if user.professor %}
+                            <a href="{% url 'dashboard_professor' %}">Dashboard</a>
+                            <a href="{% url 'lancar_avaliacao' %}">Lançar Avaliação</a>
+                        {% else %}
+                            <a href="{% url 'dashboard_aluno' %}">Dashboard</a>
+                            <a href="{% url 'boletim_aluno' %}">Meu Boletim</a>
+                        {% endif %}
+                        <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-link">Sair</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'cadastro_aluno' %}">Cadastro Aluno</a>
+                        <a href="{% url 'cadastro_professor' %}">Cadastro Professor</a>
+                    {% endif %}
                 </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        </nav>
+    </header>
 
+    <main>
         {% block content %}
         {% endblock %}
-    </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sistema de Avaliação. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html> 

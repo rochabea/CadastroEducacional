@@ -41,8 +41,8 @@ INSTALLED_APPS = [
 ]
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/professor/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/professor/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 

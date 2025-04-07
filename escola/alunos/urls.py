@@ -12,4 +12,5 @@ urlpatterns = [
     path('aluno/boletim/', views.boletim_aluno, name='boletim_aluno'),
     path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),
     path('cadastro/professor/', views.cadastro_professor, name='cadastro_professor'),
+    path('logout/', views.logout_view, name='logout'),
 ]

@@ -22,6 +22,7 @@ def lancar_avaliacao(request):
             avaliacao = form.save(commit=False)
             avaliacao.professor = professor
             avaliacao.save()
+            messages.success(request, 'Avaliação lançada com sucesso!')
             return redirect('dashboard_professor')
     else:
         form = AvaliacaoForm()
@@ -77,7 +78,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .models import Avaliacao, Aluno, Professor
 from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
 
@@ -88,11 +89,13 @@ def home(request):
 def dashboard_professor(request):
     try:
         professor = Professor.objects.get(user=request.user)
-        avaliacoes = Avaliacao.objects.filter(professor=professor)
+        avaliacoes = (Avaliacao.objects
+                     .filter(professor=professor)
+                     .select_related('aluno', 'aluno__user')
+                     .order_by('aluno__user__first_name', 'aluno__user__last_name'))
         return render(request, 'alunos/dashboard_professor.html', {'avaliacoes': avaliacoes})
     except Professor.DoesNotExist:
-        messages.error(request, 'Professor não encontrado')
-        return render(request, 'error.html', {'message': 'Professor não encontrado'})
+        return redirect('home')
 
 @login_required
 def lancar_avaliacao(request):
@@ -104,16 +107,12 @@ def lancar_avaliacao(request):
                 avaliacao = form.save(commit=False)
                 avaliacao.professor = professor
                 avaliacao.save()
-                messages.success(request, 'Avaliação lançada com sucesso!')
                 return redirect('dashboard_professor')
-            else:
-                messages.error(request, 'Por favor, corrija os erros no formulário.')
         else:
             form = AvaliacaoForm()
         return render(request, 'alunos/lancar_avaliacao.html', {'form': form})
     except Professor.DoesNotExist:
-        messages.error(request, 'Professor não encontrado')
-        return render(request, 'error.html', {'message': 'Professor não encontrado'})
+        return redirect('home')
 
 @login_required
 def boletim_aluno(request):
@@ -197,10 +196,8 @@ def login_view(request):
                     aluno = Aluno.objects.get(user=user)
                     return redirect('dashboard_aluno')
                 except Aluno.DoesNotExist:
-                    messages.error(request, 'Usuário não encontrado')
                     return redirect('login')
         else:
-            messages.error(request, 'Usuário ou senha inválidos')
             return redirect('login')
     
     return render(request, 'login.html')
@@ -248,3 +245,9 @@ def excluir_avaliacao(request, avaliacao_id):
     except Professor.DoesNotExist:
         messages.error(request, 'Professor não encontrado')
         return render(request, 'error.html', {'message': 'Professor não encontrado'})
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
+    return redirect('home')

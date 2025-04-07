@@ -13,14 +13,14 @@
     <div class="avaliacoes-section">
         <h3>Avaliações Lançadas</h3>
         {% if avaliacoes %}
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Aluno</th>
-                        <th>Nota B1</th>
-                        <th>Nota B2</th>
-                        <th>Faltas</th>
+                        <th>1º Bimestre</th>
+                        <th>2º Bimestre</th>
                         <th>Média</th>
+                        <th>Faltas</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -28,29 +28,82 @@
                 <tbody>
                     {% for avaliacao in avaliacoes %}
                         <tr>
-                            <td>{{ avaliacao.aluno }}</td>
-                            <td>{{ avaliacao.nota_b1 }}</td>
-                            <td>{{ avaliacao.nota_b2 }}</td>
-                            <td>{{ avaliacao.faltas }}</td>
-                            <td>{{ avaliacao.media }}</td>
+                            <td>{{ avaliacao.aluno.user.get_full_name }}</td>
+                            <td>{{ avaliacao.nota_b1|default:"-" }}</td>
+                            <td>{{ avaliacao.nota_b2|default:"-" }}</td>
+                            <td><strong>{{ avaliacao.media|default:"-" }}</strong></td>
+                            <td>{{ avaliacao.faltas|default:"0" }}</td>
                             <td>
-                                <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% else %}status-reprovado{% endif %}">
-                                    {{ avaliacao.status }}
+                                <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% elif avaliacao.status == 'Reprovado' %}status-reprovado{% else %}status-pendente{% endif %}">
+                                    {{ avaliacao.status|default:"Pendente" }}
                                 </span>
                             </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="{% url 'editar_avaliacao' avaliacao.id %}" class="btn-edit">Editar</a>
-                                    <a href="{% url 'excluir_avaliacao' avaliacao.id %}" class="btn-delete">Excluir</a>
-                                </div>
+                            <td class="action-buttons">
+                                <a href="{% url 'editar_avaliacao' avaliacao.id %}" class="btn-edit">Editar</a>
+                                <a href="{% url 'excluir_avaliacao' avaliacao.id %}" class="btn-delete">Excluir</a>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <p class="no-data">Nenhuma avaliação lançada ainda.</p>
+            <div class="alert alert-info">
+                <p>Nenhuma avaliação registrada ainda.</p>
+            </div>
         {% endif %}
     </div>
 </div>
+
+<style>
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.status-aprovado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-reprovado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-edit, .btn-delete {
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.btn-edit {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+</style>
 {% endblock %} 

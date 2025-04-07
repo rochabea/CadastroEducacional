@@ -5,40 +5,78 @@
 
 {% block content %}
 <div class="boletim-container">
-    <h2>Meu Boletim</h2>
-    
-    {% if avaliacoes %}
-        <div class="boletim-info">
-            <div class="aluno-info">
-                <h3>Informações do Aluno</h3>
-                <p><strong>Nome:</strong> {{ request.user.get_full_name }}</p>
-                <p><strong>Matrícula:</strong> {{ request.user.aluno.matricula }}</p>
-            </div>
+    <div class="boletim-info">
+        <div class="aluno-info">
+            <h2>Boletim do Aluno</h2>
+            <p><strong>Nome:</strong> {{ user.get_full_name }}</p>
+            <p><strong>Matrícula:</strong> {{ user.aluno.matricula }}</p>
+        </div>
 
+        {% if avaliacoes %}
             <div class="avaliacoes-section">
-                <h3>Minhas Avaliações</h3>
-                <table>
+                <h3>Avaliações</h3>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Professor</th>
-                            <th>Nota B1</th>
-                            <th>Nota B2</th>
+                            <th>1º Bimestre</th>
+                            <th>2º Bimestre</th>
+                            <th>3º Bimestre</th>
+                            <th>4º Bimestre</th>
+                            <th>Média Final</th>
                             <th>Faltas</th>
-                            <th>Média</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for avaliacao in avaliacoes %}
                             <tr>
-                                <td>{{ avaliacao.professor }}</td>
-                                <td>{{ avaliacao.nota_b1 }}</td>
-                                <td>{{ avaliacao.nota_b2 }}</td>
-                                <td>{{ avaliacao.faltas }}</td>
-                                <td>{{ avaliacao.media }}</td>
+                                <td>{{ avaliacao.professor.user.get_full_name }}</td>
                                 <td>
-                                    <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% else %}status-reprovado{% endif %}">
-                                        {{ avaliacao.status }}
+                                    <div class="notas-bimestre">
+                                        <p>P1: {{ avaliacao.nota_b1_p1|default:"-" }}</p>
+                                        <p>P2: {{ avaliacao.nota_b1_p2|default:"-" }}</p>
+                                        {% if avaliacao.nota_b1_p3 %}
+                                            <p>Rec: {{ avaliacao.nota_b1_p3 }}</p>
+                                        {% endif %}
+                                        <p class="media-bimestre">Média: {{ avaliacao.media_b1|default:"-" }}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="notas-bimestre">
+                                        <p>P1: {{ avaliacao.nota_b2_p1|default:"-" }}</p>
+                                        <p>P2: {{ avaliacao.nota_b2_p2|default:"-" }}</p>
+                                        {% if avaliacao.nota_b2_p3 %}
+                                            <p>Rec: {{ avaliacao.nota_b2_p3 }}</p>
+                                        {% endif %}
+                                        <p class="media-bimestre">Média: {{ avaliacao.media_b2|default:"-" }}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="notas-bimestre">
+                                        <p>P1: {{ avaliacao.nota_b3_p1|default:"-" }}</p>
+                                        <p>P2: {{ avaliacao.nota_b3_p2|default:"-" }}</p>
+                                        {% if avaliacao.nota_b3_p3 %}
+                                            <p>Rec: {{ avaliacao.nota_b3_p3 }}</p>
+                                        {% endif %}
+                                        <p class="media-bimestre">Média: {{ avaliacao.media_b3|default:"-" }}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="notas-bimestre">
+                                        <p>P1: {{ avaliacao.nota_b4_p1|default:"-" }}</p>
+                                        <p>P2: {{ avaliacao.nota_b4_p2|default:"-" }}</p>
+                                        {% if avaliacao.nota_b4_p3 %}
+                                            <p>Rec: {{ avaliacao.nota_b4_p3 }}</p>
+                                        {% endif %}
+                                        <p class="media-bimestre">Média: {{ avaliacao.media_b4|default:"-" }}</p>
+                                    </div>
+                                </td>
+                                <td><strong>{{ avaliacao.media_final|default:"-" }}</strong></td>
+                                <td>{{ avaliacao.faltas|default:"0" }}</td>
+                                <td>
+                                    <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% elif avaliacao.status == 'Reprovado' %}status-reprovado{% else %}status-pendente{% endif %}">
+                                        {{ avaliacao.status|default:"Pendente" }}
                                     </span>
                                 </td>
                             </tr>
@@ -57,32 +95,101 @@
                     <div class="resumo-item">
                         <span class="resumo-label">Média Geral:</span>
                         <span class="resumo-value">
-                            {% with total=0 %}
+                            {% with total=0 count=0 %}
                                 {% for avaliacao in avaliacoes %}
-                                    {% with total=total|add:avaliacao.media %}{% endwith %}
+                                    {% with media=avaliacao.media_final %}
+                                        {% if media > 0 %}
+                                            {% with total=total|add:media count=count|add:1 %}{% endwith %}
+                                        {% endif %}
+                                    {% endwith %}
                                 {% endfor %}
-                                {% with media=total|div:avaliacoes|length %}{{ media|floatformat:2 }}{% endwith %}
+                                {{ total|div:count|default:"-"|floatformat:2 }}
                             {% endwith %}
                         </span>
                     </div>
                     <div class="resumo-item">
                         <span class="resumo-label">Total de Faltas:</span>
                         <span class="resumo-value">
-                            {% with total=0 %}
+                            {% with total_faltas=0 %}
                                 {% for avaliacao in avaliacoes %}
-                                    {% with total=total|add:avaliacao.faltas %}{% endwith %}
+                                    {% with total_faltas=total_faltas|add:avaliacao.faltas %}{% endwith %}
                                 {% endfor %}
-                                {{ total }}
+                                {{ total_faltas }}
                             {% endwith %}
                         </span>
                     </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        <div class="no-data">
-            <p>Você ainda não possui avaliações registradas.</p>
-        </div>
-    {% endif %}
+        {% else %}
+            <div class="alert alert-info">
+                <p>Nenhuma avaliação registrada ainda.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
+
+<style>
+.notas-bimestre {
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.notas-bimestre p {
+    margin: 2px 0;
+}
+
+.media-bimestre {
+    font-weight: bold;
+    margin-top: 5px !important;
+    border-top: 1px solid #ddd;
+    padding-top: 5px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.status-aprovado {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-reprovado {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.resumo-item {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.resumo-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.resumo-value {
+    font-size: 1.2em;
+    color: #007bff;
+}
+</style>
 {% endblock %} 

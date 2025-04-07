@@ -6,5 +6,5 @@ register = template.Library()
 def div(value, arg):
     try:
         return float(value) / float(arg)
-    except (ValueError, ZeroDivisionError):
+    except (ValueError, TypeError):
         return 0 

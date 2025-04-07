@@ -229,6 +229,8 @@ a:hover {
 
 /* Estilos para o Dashboard */
 .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
 }
 
@@ -236,40 +238,39 @@ a:hover {
     margin-bottom: 30px;
 }
 
-.btn-primary {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.btn-primary:hover {
-    background-color: #2980b9;
-    color: white;
-    text-decoration: none;
-}
-
 .avaliacoes-section {
-    background-color: white;
+    background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .avaliacoes-section h3 {
-    color: #2c3e50;
     margin-bottom: 20px;
+    color: #333;
 }
 
-.no-data {
-    text-align: center;
-    color: #666;
-    padding: 20px;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
     background-color: #f8f9fa;
-    border-radius: 4px;
+    font-weight: 600;
+    color: #333;
+}
+
+.table tr:hover {
+    background-color: #f5f5f5;
 }
 
 .status-badge {
@@ -277,7 +278,7 @@ a:hover {
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .status-aprovado {
@@ -288,6 +289,51 @@ a:hover {
 .status-reprovado {
     background-color: #f8d7da;
     color: #721c24;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
 }
 
 /* Estilos para o formulário de lançamento de avaliação */
@@ -584,4 +630,20 @@ a:hover {
     padding: 15px 30px;
     font-size: 18px;
     min-width: 200px;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    text-decoration: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
 } 
