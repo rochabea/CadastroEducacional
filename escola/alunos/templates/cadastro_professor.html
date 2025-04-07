@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro de Professor{% endblock %}
+
+{% block content %}
+<h2>Cadastro de Professor</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ prof_form.as_p }}
+    <button type="submit">Cadastrar</button>
+</form>
+{% endblock %}

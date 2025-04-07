@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Erro{% endblock %}
+
+{% block content %}
+<h1>Erro</h1>
+<p>{{ message }}</p>
+<a href="{% url 'home' %}">Voltar para a página inicial</a>
+{% endblock %} 

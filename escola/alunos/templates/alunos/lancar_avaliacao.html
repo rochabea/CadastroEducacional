@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editar %}Editar{% else %}Lançar{% endif %} Avaliação{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>{% if editar %}Editar{% else %}Lançar{% endif %} Avaliação</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+            <div class="alert alert-error">
+                Por favor, corrija os erros abaixo.
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="{{ form.aluno.id_for_label }}">Aluno:</label>
+            {{ form.aluno }}
+            {% if form.aluno.errors %}
+                <span class="error-message">{{ form.aluno.errors }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.nota_b1.id_for_label }}">Nota do 1º Bimestre:</label>
+            {{ form.nota_b1 }}
+            {% if form.nota_b1.errors %}
+                <span class="error-message">{{ form.nota_b1.errors }}</span>
+            {% endif %}
+            <small class="help-text">Nota deve estar entre 0 e 10</small>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.nota_b2.id_for_label }}">Nota do 2º Bimestre:</label>
+            {{ form.nota_b2 }}
+            {% if form.nota_b2.errors %}
+                <span class="error-message">{{ form.nota_b2.errors }}</span>
+            {% endif %}
+            <small class="help-text">Nota deve estar entre 0 e 10</small>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.faltas.id_for_label }}">Número de Faltas:</label>
+            {{ form.faltas }}
+            {% if form.faltas.errors %}
+                <span class="error-message">{{ form.faltas.errors }}</span>
+            {% endif %}
+            <small class="help-text">Digite o número total de faltas</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">{% if editar %}Atualizar{% else %}Salvar{% endif %} Avaliação</button>
+            <a href="{% url 'dashboard_professor' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmar Exclusão{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Confirmar Exclusão</h2>
+    
+    <div class="alert alert-warning">
+        <p>Tem certeza que deseja excluir a avaliação do aluno <strong>{{ avaliacao.aluno }}</strong>?</p>
+        <p>Esta ação não pode ser desfeita.</p>
+    </div>
+
+    <div class="avaliacao-details">
+        <p><strong>Nota B1:</strong> {{ avaliacao.nota_b1 }}</p>
+        <p><strong>Nota B2:</strong> {{ avaliacao.nota_b2 }}</p>
+        <p><strong>Faltas:</strong> {{ avaliacao.faltas }}</p>
+        <p><strong>Média:</strong> {{ avaliacao.media }}</p>
+        <p><strong>Status:</strong> 
+            <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% else %}status-reprovado{% endif %}">
+                {{ avaliacao.status }}
+            </span>
+        </p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn-danger">Confirmar Exclusão</button>
+            <a href="{% url 'dashboard_professor' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %} 

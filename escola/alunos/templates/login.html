@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Login</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Usuário:</label>
+            <input type="text" name="username" id="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+        
+        <button type="submit" class="btn-primary">Entrar</button>
+    </form>
+    
+    <div class="register-links">
+        <p>Não tem uma conta?</p>
+        <a href="{% url 'cadastro_aluno' %}">Cadastrar como Aluno</a>
+        <a href="{% url 'cadastro_professor' %}">Cadastrar como Professor</a>
+    </div>
+</div>
+{% endblock %} 

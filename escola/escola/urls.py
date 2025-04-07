@@ -17,12 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from alunos.views import home  # ou de onde estiver sua home()
+from alunos.views import home
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),  # Página inicial
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),  # Login custom
-    path('', include('alunos.urls')),  # Ou outro app
+    path('accounts/', include('django.contrib.auth.urls')),  # Inclui todas as URLs de autenticação
+    path('', include('alunos.urls')),  # Inclui as rotas do app alunos
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
 ]
-

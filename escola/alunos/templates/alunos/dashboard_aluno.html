@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard do Aluno{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Dashboard do Aluno</h2>
+    
+    <div class="dashboard-actions">
+        <a href="{% url 'boletim_aluno' %}" class="btn-primary">Ver Meu Boletim</a>
+    </div>
+
+    <div class="avaliacoes-section">
+        <h3>Minhas Avaliações Recentes</h3>
+        {% if avaliacoes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Nota B1</th>
+                        <th>Nota B2</th>
+                        <th>Faltas</th>
+                        <th>Média</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for avaliacao in avaliacoes %}
+                        <tr>
+                            <td>{{ avaliacao.professor }}</td>
+                            <td>{{ avaliacao.nota_b1 }}</td>
+                            <td>{{ avaliacao.nota_b2 }}</td>
+                            <td>{{ avaliacao.faltas }}</td>
+                            <td>{{ avaliacao.media }}</td>
+                            <td>
+                                <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% else %}status-reprovado{% endif %}">
+                                    {{ avaliacao.status }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">Você ainda não possui avaliações registradas.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

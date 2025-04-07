@@ -1,12 +1,14 @@
 <!-- templates/home.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Portal Escolar</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Portal Escolar{% endblock %}
+
+{% block content %}
+<div class="container">
     <h1>Bem-vindo ao Sistema Escolar</h1>
-    <a href="/accounts/login/?next=/professor/">Login como Professor</a><br>
-    <a href="/accounts/login/?next=/aluno/">Login como Aluno</a>
-</body>
-</html>
+    <div class="login-options">
+        <a href="{% url 'login' %}?next={% url 'dashboard_professor' %}" class="btn-primary">Login como Professor</a>
+        <a href="{% url 'login' %}?next={% url 'dashboard_aluno' %}" class="btn-primary">Login como Aluno</a>
+    </div>
+</div>
+{% endblock %}

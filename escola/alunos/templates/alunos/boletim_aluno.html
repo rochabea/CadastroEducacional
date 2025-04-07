@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Meu Boletim{% endblock %}
+
+{% block content %}
+<div class="boletim-container">
+    <h2>Meu Boletim</h2>
+    
+    {% if avaliacoes %}
+        <div class="boletim-info">
+            <div class="aluno-info">
+                <h3>Informações do Aluno</h3>
+                <p><strong>Nome:</strong> {{ request.user.get_full_name }}</p>
+                <p><strong>Matrícula:</strong> {{ request.user.aluno.matricula }}</p>
+            </div>
+
+            <div class="avaliacoes-section">
+                <h3>Minhas Avaliações</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Professor</th>
+                            <th>Nota B1</th>
+                            <th>Nota B2</th>
+                            <th>Faltas</th>
+                            <th>Média</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for avaliacao in avaliacoes %}
+                            <tr>
+                                <td>{{ avaliacao.professor }}</td>
+                                <td>{{ avaliacao.nota_b1 }}</td>
+                                <td>{{ avaliacao.nota_b2 }}</td>
+                                <td>{{ avaliacao.faltas }}</td>
+                                <td>{{ avaliacao.media }}</td>
+                                <td>
+                                    <span class="status-badge {% if avaliacao.status == 'Aprovado' %}status-aprovado{% else %}status-reprovado{% endif %}">
+                                        {{ avaliacao.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="resumo-section">
+                <h3>Resumo</h3>
+                <div class="resumo-grid">
+                    <div class="resumo-item">
+                        <span class="resumo-label">Total de Avaliações:</span>
+                        <span class="resumo-value">{{ avaliacoes|length }}</span>
+                    </div>
+                    <div class="resumo-item">
+                        <span class="resumo-label">Média Geral:</span>
+                        <span class="resumo-value">
+                            {% with total=0 %}
+                                {% for avaliacao in avaliacoes %}
+                                    {% with total=total|add:avaliacao.media %}{% endwith %}
+                                {% endfor %}
+                                {% with media=total|div:avaliacoes|length %}{{ media|floatformat:2 }}{% endwith %}
+                            {% endwith %}
+                        </span>
+                    </div>
+                    <div class="resumo-item">
+                        <span class="resumo-label">Total de Faltas:</span>
+                        <span class="resumo-value">
+                            {% with total=0 %}
+                                {% for avaliacao in avaliacoes %}
+                                    {% with total=total|add:avaliacao.faltas %}{% endwith %}
+                                {% endfor %}
+                                {{ total }}
+                            {% endwith %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="no-data">
+            <p>Você ainda não possui avaliações registradas.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

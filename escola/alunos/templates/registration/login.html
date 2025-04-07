@@ -1,15 +1,19 @@
-<!-- templates/registration/login.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login no Sistema</h2>
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Login</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Entrar</button>
     </form>
-</body>
-</html>
+    <div class="register-links">
+        <p>Não tem uma conta?</p>
+        <a href="{% url 'cadastro_aluno' %}">Cadastrar como aluno</a>
+        <a href="{% url 'cadastro_professor' %}">Cadastrar como professor</a>
+    </div>
+</div>
+{% endblock %}
