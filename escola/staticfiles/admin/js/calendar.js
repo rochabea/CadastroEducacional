@@ -7,6 +7,7 @@ depends on core.js for utility functions like removeChildren or quickElement
 {
     // CalendarNamespace -- Provides a collection of HTML calendar-related helper functions
     const CalendarNamespace = {
+        // Array of month names
         monthsOfYear: [
             gettext('January'),
             gettext('February'),
@@ -21,6 +22,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             gettext('November'),
             gettext('December')
         ],
+        // Array of month abbreviations
         monthsOfYearAbbrev: [
             pgettext('abbrev. month January', 'Jan'),
             pgettext('abbrev. month February', 'Feb'),
@@ -35,6 +37,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             pgettext('abbrev. month November', 'Nov'),
             pgettext('abbrev. month December', 'Dec')
         ],
+        // Array of day names
         daysOfWeek: [
             gettext('Sunday'),
             gettext('Monday'),
@@ -44,6 +47,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             gettext('Friday'),
             gettext('Saturday')
         ],
+        // Array of day abbreviations
         daysOfWeekAbbrev: [
             pgettext('abbrev. day Sunday', 'Sun'),
             pgettext('abbrev. day Monday', 'Mon'),
@@ -53,6 +57,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             pgettext('abbrev. day Friday', 'Fri'),
             pgettext('abbrev. day Saturday', 'Sat')
         ],
+        // Array of day initials
         daysOfWeekInitial: [
             pgettext('one letter Sunday', 'S'),
             pgettext('one letter Monday', 'M'),
@@ -62,10 +67,13 @@ depends on core.js for utility functions like removeChildren or quickElement
             pgettext('one letter Friday', 'F'),
             pgettext('one letter Saturday', 'S')
         ],
+        // First day of week (0 = Sunday, 1 = Monday, etc.)
         firstDayOfWeek: parseInt(get_format('FIRST_DAY_OF_WEEK')),
+        // Check if a year is a leap year
         isLeapYear: function(year) {
             return (((year % 4) === 0) && ((year % 100) !== 0 ) || ((year % 400) === 0));
         },
+        // Get the number of days in a month
         getDaysInMonth: function(month, year) {
             let days;
             if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
@@ -82,6 +90,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             }
             return days;
         },
+        // Draw the calendar in a specific div element
         draw: function(month, year, div_id, callback, selected) { // month = 1-12, year = 1-9999
             const today = new Date();
             const todayDay = today.getDate();
@@ -91,15 +100,7 @@ depends on core.js for utility functions like removeChildren or quickElement
 
             // Use UTC functions here because the date field does not contain time
             // and using the UTC function variants prevent the local time offset
-            // from altering the date, specifically the day field.  For example:
-            //
-            // ```
-            // var x = new Date('2013-10-02');
-            // var day = x.getDate();
-            // ```
-            //
-            // The day variable above will be 1 instead of 2 in, say, US Pacific time
-            // zone.
+            // from altering the date, specifically the day field
             let isSelectedMonth = false;
             if (typeof selected !== 'undefined') {
                 isSelectedMonth = (selected.getUTCFullYear() === year && (selected.getUTCMonth() + 1) === month);
@@ -131,6 +132,7 @@ depends on core.js for utility functions like removeChildren or quickElement
                 nonDayCell.className = "nonday";
             }
 
+            // Function to handle day click
             function calendarMonth(y, m) {
                 function onClick(e) {
                     e.preventDefault();
@@ -151,7 +153,7 @@ depends on core.js for utility functions like removeChildren or quickElement
                     todayClass = '';
                 }
 
-                // use UTC function; see above for explanation.
+                // use UTC function; see above for explanation
                 if (isSelectedMonth && currentDay === selected.getUTCDate()) {
                     if (todayClass !== '') {
                         todayClass += " ";
@@ -165,7 +167,7 @@ depends on core.js for utility functions like removeChildren or quickElement
                 currentDay++;
             }
 
-            // Draw blanks after end of month (optional, but makes for valid code)
+            // Draw blanks after end of month
             while (tableRow.childNodes.length < 7) {
                 nonDayCell = quickElement('td', tableRow, ' ');
                 nonDayCell.className = "nonday";
@@ -192,9 +194,11 @@ depends on core.js for utility functions like removeChildren or quickElement
         }
     }
     Calendar.prototype = {
+        // Draw current month
         drawCurrent: function() {
             CalendarNamespace.draw(this.currentMonth, this.currentYear, this.div_id, this.callback, this.selected);
         },
+        // Draw specific month and year
         drawDate: function(month, year, selected) {
             this.currentMonth = month;
             this.currentYear = year;
@@ -205,6 +209,7 @@ depends on core.js for utility functions like removeChildren or quickElement
 
             this.drawCurrent();
         },
+        // Draw previous month
         drawPreviousMonth: function() {
             if (this.currentMonth === 1) {
                 this.currentMonth = 12;
@@ -215,6 +220,7 @@ depends on core.js for utility functions like removeChildren or quickElement
             }
             this.drawCurrent();
         },
+        // Draw next month
         drawNextMonth: function() {
             if (this.currentMonth === 12) {
                 this.currentMonth = 1;
@@ -225,10 +231,12 @@ depends on core.js for utility functions like removeChildren or quickElement
             }
             this.drawCurrent();
         },
+        // Draw previous year
         drawPreviousYear: function() {
             this.currentYear--;
             this.drawCurrent();
         },
+        // Draw next year
         drawNextYear: function() {
             this.currentYear++;
             this.drawCurrent();

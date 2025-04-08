@@ -1,184 +1,192 @@
-// Core JavaScript helper functions
+/*global gettext, interpolate, ngettext*/
 'use strict';
-
-// quickElement(tagType, parentReference [, textInChildNode, attribute, attributeValue ...]);
-function quickElement() {
-    const obj = document.createElement(arguments[0]);
-    if (arguments[2]) {
-        const textNode = document.createTextNode(arguments[2]);
-        obj.appendChild(textNode);
-    }
-    const len = arguments.length;
-    for (let i = 3; i < len; i += 2) {
-        obj.setAttribute(arguments[i], arguments[i + 1]);
-    }
-    arguments[1].appendChild(obj);
-    return obj;
-}
-
-// "a" is reference to an object
-function removeChildren(a) {
-    while (a.hasChildNodes()) {
-        a.removeChild(a.lastChild);
-    }
-}
-
-// ----------------------------------------------------------------------------
-// Find-position functions by PPK
-// See https://www.quirksmode.org/js/findpos.html
-// ----------------------------------------------------------------------------
-function findPosX(obj) {
-    let curleft = 0;
-    if (obj.offsetParent) {
-        while (obj.offsetParent) {
-            curleft += obj.offsetLeft - obj.scrollLeft;
-            obj = obj.offsetParent;
-        }
-    } else if (obj.x) {
-        curleft += obj.x;
-    }
-    return curleft;
-}
-
-function findPosY(obj) {
-    let curtop = 0;
-    if (obj.offsetParent) {
-        while (obj.offsetParent) {
-            curtop += obj.offsetTop - obj.scrollTop;
-            obj = obj.offsetParent;
-        }
-    } else if (obj.y) {
-        curtop += obj.y;
-    }
-    return curtop;
-}
-
-//-----------------------------------------------------------------------------
-// Date object extensions
-// ----------------------------------------------------------------------------
 {
-    Date.prototype.getTwelveHours = function() {
-        return this.getHours() % 12 || 12;
-    };
+    // Main JavaScript utility functions for Django Admin
+    const $ = django.jQuery;
+    let lastChecked;
 
-    Date.prototype.getTwoDigitMonth = function() {
-        return (this.getMonth() < 9) ? '0' + (this.getMonth() + 1) : (this.getMonth() + 1);
-    };
-
-    Date.prototype.getTwoDigitDate = function() {
-        return (this.getDate() < 10) ? '0' + this.getDate() : this.getDate();
-    };
-
-    Date.prototype.getTwoDigitTwelveHour = function() {
-        return (this.getTwelveHours() < 10) ? '0' + this.getTwelveHours() : this.getTwelveHours();
-    };
-
-    Date.prototype.getTwoDigitHour = function() {
-        return (this.getHours() < 10) ? '0' + this.getHours() : this.getHours();
-    };
-
-    Date.prototype.getTwoDigitMinute = function() {
-        return (this.getMinutes() < 10) ? '0' + this.getMinutes() : this.getMinutes();
-    };
-
-    Date.prototype.getTwoDigitSecond = function() {
-        return (this.getSeconds() < 10) ? '0' + this.getSeconds() : this.getSeconds();
-    };
-
-    Date.prototype.getAbbrevDayName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? '0' + this.getDay()
-            : window.CalendarNamespace.daysOfWeekAbbrev[this.getDay()];
-    };
-
-    Date.prototype.getFullDayName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? '0' + this.getDay()
-            : window.CalendarNamespace.daysOfWeek[this.getDay()];
-    };
-
-    Date.prototype.getAbbrevMonthName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? this.getTwoDigitMonth()
-            : window.CalendarNamespace.monthsOfYearAbbrev[this.getMonth()];
-    };
-
-    Date.prototype.getFullMonthName = function() {
-        return typeof window.CalendarNamespace === "undefined"
-            ? this.getTwoDigitMonth()
-            : window.CalendarNamespace.monthsOfYear[this.getMonth()];
-    };
-
-    Date.prototype.strftime = function(format) {
-        const fields = {
-            a: this.getAbbrevDayName(),
-            A: this.getFullDayName(),
-            b: this.getAbbrevMonthName(),
-            B: this.getFullMonthName(),
-            c: this.toString(),
-            d: this.getTwoDigitDate(),
-            H: this.getTwoDigitHour(),
-            I: this.getTwoDigitTwelveHour(),
-            m: this.getTwoDigitMonth(),
-            M: this.getTwoDigitMinute(),
-            p: (this.getHours() >= 12) ? 'PM' : 'AM',
-            S: this.getTwoDigitSecond(),
-            w: '0' + this.getDay(),
-            x: this.toLocaleDateString(),
-            X: this.toLocaleTimeString(),
-            y: ('' + this.getFullYear()).substr(2, 4),
-            Y: '' + this.getFullYear(),
-            '%': '%'
-        };
-        let result = '', i = 0;
-        while (i < format.length) {
-            if (format.charAt(i) === '%') {
-                result += fields[format.charAt(i + 1)];
-                ++i;
-            }
-            else {
-                result += format.charAt(i);
-            }
-            ++i;
+    // Quick element creation
+    // quickElement(tagType, parentElement [, textInChildNode, attribute, attributeValue ...]);
+    function quickElement() {
+        const obj = document.createElement(arguments[0]);
+        if (arguments[2]) {
+            const textNode = document.createTextNode(arguments[2]);
+            obj.appendChild(textNode);
         }
+        const len = arguments.length;
+        for (let i = 3; i < len; i += 2) {
+            obj.setAttribute(arguments[i], arguments[i + 1]);
+        }
+        arguments[1].appendChild(obj);
+        return obj;
+    }
+
+    // Remove all child nodes from an element
+    function removeChildren(element) {
+        while (element.hasChildNodes()) {
+            element.removeChild(element.lastChild);
+        }
+    }
+
+    // Add an event listener to an element
+    function addEvent(element, eventName, handler) {
+        element.addEventListener(eventName, handler);
+    }
+
+    // Remove an event listener from an element
+    function removeEvent(element, eventName, handler) {
+        element.removeEventListener(eventName, handler);
+    }
+
+    // Get the value of a cookie
+    function getCookie(name) {
+        const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return cookieValue ? cookieValue.pop() : '';
+    }
+
+    // Set a cookie
+    function setCookie(name, value, expires, path, domain, secure) {
+        document.cookie = name + '=' + value +
+            (expires ? '; expires=' + expires.toUTCString() : '') +
+            (path ? '; path=' + path : '') +
+            (domain ? '; domain=' + domain : '') +
+            (secure ? '; secure' : '');
+    }
+
+    // Delete a cookie
+    function deleteCookie(name, path, domain) {
+        setCookie(name, '', new Date(0), path, domain);
+    }
+
+    // Format a date
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return year + '-' + month + '-' + day;
+    }
+
+    // Format a time
+    function formatTime(date) {
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        return hours + ':' + minutes + ':' + seconds;
+    }
+
+    // Format a datetime
+    function formatDateTime(date) {
+        return formatDate(date) + ' ' + formatTime(date);
+    }
+
+    // Get the current date
+    function getCurrentDate() {
+        return new Date();
+    }
+
+    // Get the current time
+    function getCurrentTime() {
+        return new Date();
+    }
+
+    // Get the current datetime
+    function getCurrentDateTime() {
+        return new Date();
+    }
+
+    // Add days to a date
+    function addDays(date, days) {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
         return result;
-    };
+    }
 
-    // ----------------------------------------------------------------------------
-    // String object extensions
-    // ----------------------------------------------------------------------------
-    String.prototype.strptime = function(format) {
-        const split_format = format.split(/[.\-/]/);
-        const date = this.split(/[.\-/]/);
-        let i = 0;
-        let day, month, year;
-        while (i < split_format.length) {
-            switch (split_format[i]) {
-            case "%d":
-                day = date[i];
-                break;
-            case "%m":
-                month = date[i] - 1;
-                break;
-            case "%Y":
-                year = date[i];
-                break;
-            case "%y":
-                // A %y value in the range of [00, 68] is in the current
-                // century, while [69, 99] is in the previous century,
-                // according to the Open Group Specification.
-                if (parseInt(date[i], 10) >= 69) {
-                    year = date[i];
-                } else {
-                    year = (new Date(Date.UTC(date[i], 0))).getUTCFullYear() + 100;
-                }
-                break;
-            }
-            ++i;
+    // Add months to a date
+    function addMonths(date, months) {
+        const result = new Date(date);
+        result.setMonth(result.getMonth() + months);
+        return result;
+    }
+
+    // Add years to a date
+    function addYears(date, years) {
+        const result = new Date(date);
+        result.setFullYear(result.getFullYear() + years);
+        return result;
+    }
+
+    // Check if a date is valid
+    function isValidDate(date) {
+        return date instanceof Date && !isNaN(date);
+    }
+
+    // Check if a string is a valid date
+    function isValidDateString(dateString) {
+        const date = new Date(dateString);
+        return isValidDate(date);
+    }
+
+    // Check if a string is a valid time
+    function isValidTimeString(timeString) {
+        const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+        return timeRegex.test(timeString);
+    }
+
+    // Check if a string is a valid datetime
+    function isValidDateTimeString(dateTimeString) {
+        const dateTime = new Date(dateTimeString);
+        return isValidDate(dateTime);
+    }
+
+    // Parse a date string
+    function parseDate(dateString) {
+        const date = new Date(dateString);
+        return isValidDate(date) ? date : null;
+    }
+
+    // Parse a time string
+    function parseTime(timeString) {
+        if (!isValidTimeString(timeString)) {
+            return null;
         }
-        // Create Date object from UTC since the parsed value is supposed to be
-        // in UTC, not local time. Also, the calendar uses UTC functions for
-        // date extraction.
-        return new Date(Date.UTC(year, month, day));
+        const [hours, minutes, seconds = '00'] = timeString.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours, 10));
+        date.setMinutes(parseInt(minutes, 10));
+        date.setSeconds(parseInt(seconds, 10));
+        return date;
+    }
+
+    // Parse a datetime string
+    function parseDateTime(dateTimeString) {
+        return parseDate(dateTimeString);
+    }
+
+    // Export functions
+    window.django = {
+        jQuery: $,
+        quickElement: quickElement,
+        removeChildren: removeChildren,
+        addEvent: addEvent,
+        removeEvent: removeEvent,
+        getCookie: getCookie,
+        setCookie: setCookie,
+        deleteCookie: deleteCookie,
+        formatDate: formatDate,
+        formatTime: formatTime,
+        formatDateTime: formatDateTime,
+        getCurrentDate: getCurrentDate,
+        getCurrentTime: getCurrentTime,
+        getCurrentDateTime: getCurrentDateTime,
+        addDays: addDays,
+        addMonths: addMonths,
+        addYears: addYears,
+        isValidDate: isValidDate,
+        isValidDateString: isValidDateString,
+        isValidTimeString: isValidTimeString,
+        isValidDateTimeString: isValidDateTimeString,
+        parseDate: parseDate,
+        parseTime: parseTime,
+        parseDateTime: parseDateTime
     };
 }

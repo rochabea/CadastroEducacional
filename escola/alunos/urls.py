@@ -1,16 +1,28 @@
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Rota inicial do sistema
     path('', views.home, name='home'),
+    
+    # Rotas de autenticação
     path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    
+    # Rotas do painel de controle
     path('dashboard/professor/', views.dashboard_professor, name='dashboard_professor'),
     path('dashboard/aluno/', views.dashboard_aluno, name='dashboard_aluno'),
+    
+    # Rotas de gerenciamento de avaliações
     path('professor/lancar/', views.lancar_avaliacao, name='lancar_avaliacao'),
     path('avaliacao/<int:avaliacao_id>/editar/', views.editar_avaliacao, name='editar_avaliacao'),
     path('avaliacao/<int:avaliacao_id>/excluir/', views.excluir_avaliacao, name='excluir_avaliacao'),
+    
+    # Rota do boletim do aluno
     path('aluno/boletim/', views.boletim_aluno, name='boletim_aluno'),
+    
+    # Rotas de cadastro
     path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),
     path('cadastro/professor/', views.cadastro_professor, name='cadastro_professor'),
-    path('logout/', views.logout_view, name='logout'),
 ]
