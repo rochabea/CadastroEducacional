@@ -27,7 +27,6 @@ O CadastroEducacional é um sistema desenvolvido para facilitar o gerenciamento 
 - Python 3.x
 - Django
 - pip (gerenciador de pacotes Python)
-- Virtualenv (recomendado)
 
 ## 📦 Instalação
 
