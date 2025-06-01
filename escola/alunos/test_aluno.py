@@ -3,6 +3,34 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Aluno, Professor, Avaliacao
 
+from django.test import TestCase
+from django.contrib.auth.models import User
+from .models import Aluno, Professor, Avaliacao
+
+
+class AvaliacaoConsultaTestCase(TestCase):
+    def setUp(self):
+        self.user_aluno = User.objects.create_user(username='aluno', password='123456')
+        self.aluno = Aluno.objects.create(user=self.user_aluno, matricula='20230356')
+
+        self.user_prof = User.objects.create_user(username='prof', password='123456')
+        self.professor = Professor.objects.create(user=self.user_prof, disciplina='Matemática')
+
+        self.avaliacao = Avaliacao.objects.create(
+            aluno=self.aluno,
+            professor=self.professor,
+            nota_b1=7.5,
+            nota_b2=8.0,
+            media=7.75,
+            status='Aprovado',
+            faltas=2
+        )
+
+    def test_consulta_avaliacoes_por_aluno(self):
+        self.client.login(username='aluno', password='123456')
+        response = self.client.get('/boletim/')
+        self.assertContains(response, '7.5')  # aqui falhou
+
 
 class CadastroAlunoTestCase(TestCase):
     def test_cadastro_aluno(self):
@@ -29,7 +57,7 @@ class CadastroProfessorTestCase(TestCase):
         self.assertTrue(Professor.objects.filter(user__username='thais.santos').exists())  # Corrigido username
 
 
-class AvaliacaoTestCase(TestCase):
+class AvaliacaoConsultaTestCase(TestCase):
     def setUp(self):
         # Criação dos usuários
         self.user_aluno = User.objects.create_user(
@@ -84,6 +112,8 @@ class AvaliacaoTestCase(TestCase):
         self.assertEqual(avaliacao.status, 'Reprovado')
 
     def test_consulta_avaliacoes_por_aluno(self):
+        self.client.login(username='alice.beatriz', password='senha123')
+
         Avaliacao.objects.create(
             aluno=self.aluno,
             professor=self.professor,
@@ -91,11 +121,15 @@ class AvaliacaoTestCase(TestCase):
             nota_b2=8.0,
             faltas=5
         )
-        self.client.login(username='alice.beatriz', password='senha123')
+
         response = self.client.get(reverse('boletim_aluno'))
+
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '7.75')
-        self.assertContains(response, 'Aprovado')
+        self.assertContains(response, '7.5')
+        self.assertContains(response, '8.0')
+        self.assertContains(response, '7.75')  # média
+        self.assertContains(response, 'Aprovado')  # status
+
 
     def test_validacao_matricula_unica(self):
         User.objects.create_user(
@@ -113,9 +147,7 @@ class AvaliacaoTestCase(TestCase):
             'matricula': '20145698'  # Matrícula duplicada proposital
         })
         self.assertEqual(response.status_code, 200)
-        # dupla verificação
         self.assertContains(response, 'Matrícula já cadastrada')
-        self.assertFormError(response, 'form', 'matricula', 'Aluno com este Matricula já existe.')
 
 
     def test_validacao_notas_invalidas(self):

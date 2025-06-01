@@ -46,11 +46,34 @@ def lancar_avaliacao(request):
 def boletim_aluno(request):
     try:
         aluno = Aluno.objects.get(user=request.user)
-        avaliacoes = Avaliacao.objects.filter(aluno=aluno)
-        return render(request, 'alunos/boletim_aluno.html', {'avaliacoes': avaliacoes})
+        avaliacoes = Avaliacao.objects.filter(aluno=aluno).select_related('professor', 'professor__user')
+
+        boletim = []
+        for avaliacao in avaliacoes:
+            boletim.append({
+                'professor': avaliacao.professor.user.get_full_name(),
+                'nota_b1': avaliacao.nota_b1,
+                'nota_b2': avaliacao.nota_b2,
+                'media': avaliacao.media,
+                'status': avaliacao.status,
+                'faltas': avaliacao.faltas,
+            })
+
+        return render(request, 'alunos/boletim_aluno.html', {
+            'boletim': boletim,
+            'aluno': aluno
+        })
     except Aluno.DoesNotExist:
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
+
+
+
+def calcular_media(nota1, nota2):
+    if nota1 is not None and nota2 is not None:
+        return round((nota1 + nota2) / 2, 1)
+    return None
+
 
 # Painel de controle do aluno
 @login_required
@@ -186,3 +209,6 @@ def logout_view(request):
         logout(request)
         return redirect('home')
     return render(request, 'logout.html')
+
+
+

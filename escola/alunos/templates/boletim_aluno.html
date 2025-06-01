@@ -1,6 +1,24 @@
-<h2>Boletim</h2>
-<ul>
-  {% for avaliacao in avaliacoes %}
-    <li>Média: {{ avaliacao.media }} | Faltas: {{ avaliacao.faltas }} | Status: {{ avaliacao.status }}</li>
-  {% endfor %}
-</ul>
+{% if avaliacoes %}
+    <table>
+        <tr>
+            <th>Bimestre 1</th>
+            <th>Bimestre 2</th>
+            <th>Média</th>
+            <th>Faltas</th>
+            <th>Status</th>
+        </tr>
+        {% for avaliacao in avaliacoes %}
+        <tr>
+            <td>{{ avaliacao.nota_b1 }}</td>
+            <td>{{ avaliacao.nota_b2 }}</td>
+            <td>{{ avaliacao.media }}</td>
+            <td>{{ avaliacao.faltas }}</td>
+            <td>{{ avaliacao.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <div class="alert alert-info">
+        <p>Nenhuma avaliação registrada ainda.</p>
+    </div>
+{% endif %}
