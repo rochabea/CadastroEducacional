@@ -5,6 +5,9 @@ register = template.Library()
 @register.filter
 def div(value, arg):
     try:
-        return float(value) / float(arg)
+        arg = float(arg)
+        if arg == 0:
+            return 0 
+        return float(value) / arg
     except (ValueError, TypeError):
         return 0 

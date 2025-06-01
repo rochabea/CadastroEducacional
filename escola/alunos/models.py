@@ -11,7 +11,14 @@ class Aluno(models.Model):
     # Relacionamento com o usuário do sistema
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Número de matrícula único do aluno
-    matricula = models.CharField(max_length=20, unique=True)
+    matricula = models.CharField(
+    max_length=20,
+    unique=True,
+    error_messages={
+        'unique': "Matrícula já cadastrada. Use uma diferente."
+    }
+)
+
 
     # Retorna o nome completo do aluno
     def __str__(self):
@@ -44,14 +51,21 @@ class Avaliacao(models.Model):
     # Status atual do aluno 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True)
 
-    # Média
+    @property
     def media(self):
         return round((self.nota_b1 + self.nota_b2) / 2, 2)
 
+
     # Aprovado se média >= 6 e faltas <= 10
     def calcular_status(self):
-        media = self.media()
-        return 'Aprovado' if media >= 6 and self.faltas <= 10 else 'Reprovado'
+        media = self.media  
+        if self.faltas > 15:
+            return 'Reprovado por faltas'
+        elif media >= 7.0:
+            return 'Aprovado'
+        else:
+            return 'Reprovado'
+
 
     # Salva a avaliação e atualiza o status automaticamente
     def save(self, *args, **kwargs):
