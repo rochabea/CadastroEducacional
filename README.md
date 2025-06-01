@@ -11,7 +11,6 @@ O CadastroEducacional é um sistema desenvolvido para facilitar o gerenciamento 
 - Cadastro de alunos
 - Registro de notas por disciplina
 - Controle de presença
-- Geração de relatórios
 - Interface intuitiva e fácil de usar
 
 ## 🔧 Tecnologias Utilizadas
