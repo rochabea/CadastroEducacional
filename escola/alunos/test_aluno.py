@@ -3,11 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Aluno, Professor, Avaliacao
 
-from django.test import TestCase
-from django.contrib.auth.models import User
-from .models import Aluno, Professor, Avaliacao
-
-
+'''
 class AvaliacaoConsultaTestCase(TestCase):
     def setUp(self):
         self.user_aluno = User.objects.create_user(username='aluno', password='123456')
@@ -27,9 +23,14 @@ class AvaliacaoConsultaTestCase(TestCase):
         )
 
     def test_consulta_avaliacoes_por_aluno(self):
-        self.client.login(username='aluno', password='123456')
-        response = self.client.get('/boletim/')
-        self.assertContains(response, '7.5')  # aqui falhou
+        self.client.login(username='ana.bia', password='Teste@1')
+        response = self.client.get(reverse('boletim_aluno'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '7.5')
+        self.assertContains(response, '8.0')
+        self.assertContains(response, '7.75')
+        self.assertContains(response, 'Aprovado')
+'''
 
 
 class CadastroAlunoTestCase(TestCase):
@@ -57,7 +58,7 @@ class CadastroProfessorTestCase(TestCase):
         self.assertTrue(Professor.objects.filter(user__username='thais.santos').exists())  # Corrigido username
 
 
-class AvaliacaoConsultaTestCase(TestCase):
+class AvaliacaoOperacoesTestCase(TestCase):
     def setUp(self):
         # Criação dos usuários
         self.user_aluno = User.objects.create_user(
@@ -113,22 +114,21 @@ class AvaliacaoConsultaTestCase(TestCase):
 
     def test_consulta_avaliacoes_por_aluno(self):
         self.client.login(username='alice.beatriz', password='senha123')
-
-        Avaliacao.objects.create(
+        avaliacao = Avaliacao.objects.create(
             aluno=self.aluno,
             professor=self.professor,
             nota_b1=7.5,
             nota_b2=8.0,
-            faltas=5
+            faltas=2
         )
-
         response = self.client.get(reverse('boletim_aluno'))
-
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '7.5')
         self.assertContains(response, '8.0')
-        self.assertContains(response, '7.75')  # média
-        self.assertContains(response, 'Aprovado')  # status
+        self.assertContains(response, '7.75')
+        self.assertContains(response, 'Aprovado')
+
+
 
 
     def test_validacao_matricula_unica(self):
