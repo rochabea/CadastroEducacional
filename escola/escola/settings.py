@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'alunos'
+    "alunos"
 ]
 
 LOGIN_URL = 'login'

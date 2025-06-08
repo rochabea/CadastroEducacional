@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Avaliações</h1>
+
+  {% if avaliacoes %}
+    <ul>
+      {% for avaliacao in avaliacoes %}
+        <li>
+          Professor: {{ avaliacao.professor.user.get_full_name }}<br>
+          Nota B1: {{ avaliacao.nota_b1 }}<br>
+          Nota B2: {{ avaliacao.nota_b2 }}<br>
+          Faltas: {{ avaliacao.faltas }}
+        </li>
+        <hr>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não possui avaliações cadastradas.</p>
+  {% endif %}
+{% endblock %}

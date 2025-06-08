@@ -25,4 +25,9 @@ urlpatterns = [
     # Rotas de cadastro
     path('cadastro/aluno/', views.cadastro_aluno, name='cadastro_aluno'),
     path('cadastro/professor/', views.cadastro_professor, name='cadastro_professor'),
+
+    # Rota para visualização das avaliações
+    path('avaliacoes/lista/', views.lista_avaliacoes, name='lista_avaliacoes'),
+    path('avaliacoes/consulta/', views.consulta_avaliacoes, name='consulta_avaliacoes'),
+
 ]
