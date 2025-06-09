@@ -199,7 +199,7 @@ fieldset .fieldBox {
     margin-right: 20px;
 }
 
-/* WIDE FIELDSETS */
+/* WIDE */
 
 .wide label {
     width: 200px;
@@ -220,7 +220,7 @@ form div.help ul {
     width: 450px;
 }
 
-/* COLLAPSIBLE FIELDSETS */
+/* COLLAPSIBLE */
 
 .collapse summary .fieldset-heading,
 .collapse summary .inline-heading {
@@ -232,7 +232,7 @@ form div.help ul {
     padding: 0;
 }
 
-/* MONOSPACE TEXTAREAS */
+/* MONOSPACE */
 
 fieldset.monospace textarea {
     font-family: var(--font-family-monospace);
@@ -307,7 +307,7 @@ body.popup .submit-row {
     text-decoration: none;
 }
 
-/* CUSTOM FORM FIELDS */
+/* CUSTOM FORM */
 
 .vSelectMultipleField {
     vertical-align: top;
@@ -471,7 +471,7 @@ body.popup .submit-row {
     display: none;
 }
 
-/* RELATED FIELD ADD ONE / LOOKUP */
+/* RELATED */
 
 .related-lookup {
     margin-left: 5px;
