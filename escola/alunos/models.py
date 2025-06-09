@@ -19,7 +19,6 @@ class Aluno(models.Model):
     }
 )
 
-
     # Retorna o nome completo do aluno
     def __str__(self):
         return self.user.get_full_name()
@@ -74,5 +73,6 @@ class Avaliacao(models.Model):
 
     # Retorna uma string com informações da avaliação
     def __str__(self):
-        return f"{self.aluno} - Média: {self.media()} - {self.status}"
+        return f"{self.aluno} - Média: {self.media} - {self.status}"
+
     
