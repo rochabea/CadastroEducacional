@@ -71,7 +71,7 @@ html[data-theme="dark"] {
     color-scheme: dark;
 }
 
-/* THEME SWITCH */
+/* THEME */
 .theme-toggle {
     cursor: pointer;
     border: none;
@@ -89,10 +89,6 @@ html[data-theme="dark"] {
     display: none;
 }
 
-/*
-Fully hide screen reader text so we only show the one matching the current
-theme.
-*/
 .theme-toggle .visually-hidden {
     display: none;
 }

@@ -5,6 +5,7 @@ Alunos (usuários comuns) podem acessar suas informações com login e senha.
 """
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Classe que representa um aluno no sistema
 class Aluno(models.Model):
@@ -75,4 +76,9 @@ class Avaliacao(models.Model):
     def __str__(self):
         return f"{self.aluno} - Média: {self.media} - {self.status}"
 
-    
+    # Verifica se as notas estão dentro do intervalo válido
+    def clean(self):
+        if not (0 <= self.nota_b1 <= 10):
+            raise ValidationError("Nota B1 inválida: deve estar entre 0 e 10.")
+        if not (0 <= self.nota_b2 <= 10):
+            raise ValidationError("Nota B2 inválida: deve estar entre 0 e 10.")

@@ -21,6 +21,23 @@ O CadastroEducacional é um sistema desenvolvido para facilitar o gerenciamento 
 - Framework Web: Django
 - Template Engine: Django Templates
 
+## ✅ Testes
+
+Este projeto possui testes automatizados que validam funcionalidades importantes como:
+- Teste unitário;
+- Teste ponta a ponta;
+- Teste de integração de sistema;
+- Teste de aceite;
+- Teste de integração de unidades;
+- Teste de carga;
+- Teste de stress;
+- Teste de interface do usuário;
+- Teste de caixa preta;
+- Teste de caixa branca.
+
+
+
+
 ## ⚙️ Requisitos
 
 - Python 3.x
