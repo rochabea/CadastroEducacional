@@ -11,14 +11,12 @@
             }
         },
         redisplay: function(id) {
-            // Repopulate HTML select box from cache
             const box = document.getElementById(id);
             const scroll_value_from_top = box.scrollTop;
             box.innerHTML = '';
             for (const node of SelectBox.cache[id]) {
                 if (node.displayed) {
                     const new_option = new Option(node.text, node.value, false, false);
-                    // Shows a tooltip when hovering over the option
                     new_option.title = node.text;
                     box.appendChild(new_option);
                 }
@@ -26,8 +24,7 @@
             box.scrollTop = scroll_value_from_top;
         },
         filter: function(id, text) {
-            // Redisplay the HTML select box, displaying only the choices containing ALL
-            // the words in text. (It's an AND search.)
+
             const tokens = text.toLowerCase().split(/\s+/);
             for (const node of SelectBox.cache[id]) {
                 node.displayed = 1;
@@ -35,7 +32,7 @@
                 for (const token of tokens) {
                     if (!node_text.includes(token)) {
                         node.displayed = 0;
-                        break; // Once the first token isn't found we're done
+                        break;
                     }
                 }
             }
@@ -60,7 +57,6 @@
             SelectBox.cache[id].push({value: option.value, text: option.text, displayed: 1});
         },
         cache_contains: function(id, value) {
-            // Check if an item is contained in the cache
             for (const node of SelectBox.cache[id]) {
                 if (node.value === value) {
                     return true;

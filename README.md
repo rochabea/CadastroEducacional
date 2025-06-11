@@ -32,10 +32,6 @@ Este projeto possui testes automatizados que validam funcionalidades importantes
 - Teste de stress;
 - Teste de aceite;
 - Teste de interface do usuário;
-- Teste de caixa preta;
-- Teste de caixa branca.
-
-
 
 
 ## ⚙️ Requisitos

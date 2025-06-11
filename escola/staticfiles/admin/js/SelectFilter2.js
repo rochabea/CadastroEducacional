@@ -1,42 +1,30 @@
-/*global SelectBox, gettext, ngettext, interpolate, quickElement, SelectFilter*/
-/*
-SelectFilter2 - Turns a multiple-select box into a filter interface.
 
-Requires core.js and SelectBox.js.
-*/
 'use strict';
 {
     window.SelectFilter = {
         init: function(field_id, field_name, is_stacked) {
             if (field_id.match(/__prefix__/)) {
-                // Don't initialize on empty forms.
                 return;
             }
             const from_box = document.getElementById(field_id);
-            from_box.id += '_from'; // change its ID
+            from_box.id += '_from'; 
             from_box.className = 'filtered';
             from_box.setAttribute('aria-labelledby', field_id + '_from_title');
 
             for (const p of from_box.parentNode.getElementsByTagName('p')) {
                 if (p.classList.contains("info")) {
-                    // Remove <p class="info">, because it just gets in the way.
                     from_box.parentNode.removeChild(p);
                 } else if (p.classList.contains("help")) {
-                    // Move help text up to the top so it isn't below the select
-                    // boxes or wrapped off on the side to the right of the add
-                    // button:
+
                     from_box.parentNode.insertBefore(p, from_box.parentNode.firstChild);
                 }
             }
 
-            // <div class="selector"> or <div class="selector stacked">
             const selector_div = quickElement('div', from_box.parentNode);
-            // Make sure the selector div is at the beginning so that the
-            // add link would be displayed to the right of the widget.
+
             from_box.parentNode.prepend(selector_div);
             selector_div.className = is_stacked ? 'selector stacked' : 'selector';
 
-            // <div class="selector-available">
             const selector_available = quickElement('div', selector_div);
             selector_available.className = 'selector-available';
             const selector_available_title = quickElement('div', selector_available);
@@ -75,7 +63,6 @@ Requires core.js and SelectBox.js.
                 'class', 'selector-chooseall'
             );
 
-            // <ul class="selector-chooser">
             const selector_chooser = quickElement('ul', selector_div);
             selector_chooser.className = 'selector-chooser';
             const add_button = quickElement(
@@ -93,7 +80,6 @@ Requires core.js and SelectBox.js.
                 'class', 'selector-remove'
             );
 
-            // <div class="selector-chosen">
             const selector_chosen = quickElement('div', selector_div, '', 'id', field_id + '_selector_chosen');
             selector_chosen.className = 'selector-chosen';
             const selector_chosen_title = quickElement('div', selector_chosen);
@@ -147,7 +133,6 @@ Requires core.js and SelectBox.js.
 
             from_box.name = from_box.name + '_old';
 
-            // Set up the JavaScript event handlers for the select box filter interface
             const move_selection = function(e, elem, move_func, from, to) {
                 if (!elem.hasAttribute('disabled')) {
                     move_func(from, to);
@@ -214,14 +199,11 @@ Requires core.js and SelectBox.js.
             });
             SelectBox.init(field_id + '_from');
             SelectBox.init(field_id + '_to');
-            // Move selected from_box options to to_box
             SelectBox.move(field_id + '_from', field_id + '_to');
 
-            // Initial icon refresh
             SelectFilter.refresh_icons(field_id);
         },
         any_selected: function(field) {
-            // Temporarily add the required attribute and check validity.
             field.required = true;
             const any_selected = field.checkValidity();
             field.required = false;
@@ -248,16 +230,13 @@ Requires core.js and SelectBox.js.
         refresh_icons: function(field_id) {
             const from = document.getElementById(field_id + '_from');
             const to = document.getElementById(field_id + '_to');
-            // Disabled if no items are selected.
             document.getElementById(field_id + '_add').disabled = !SelectFilter.any_selected(from);
             document.getElementById(field_id + '_remove').disabled = !SelectFilter.any_selected(to);
-            // Disabled if the corresponding box is empty.
             document.getElementById(field_id + '_add_all').disabled = !from.querySelector('option');
             document.getElementById(field_id + '_remove_all').disabled = !to.querySelector('option');
         },
         filter_key_press: function(event, field_id, source, target) {
             const source_box = document.getElementById(field_id + source);
-            // don't submit form if user pressed Enter
             if ((event.which && event.which === 13) || (event.keyCode && event.keyCode === 13)) {
                 source_box.selectedIndex = 0;
                 SelectBox.move(field_id + source, field_id + target);
@@ -276,9 +255,7 @@ Requires core.js and SelectBox.js.
         },
         filter_key_down: function(event, field_id, source, target) {
             const source_box = document.getElementById(field_id + source);
-            // right key (39) or left key (37)
             const direction = source === '_from' ? 39 : 37;
-            // right arrow -- move across
             if ((event.which && event.which === direction) || (event.keyCode && event.keyCode === direction)) {
                 const old_index = source_box.selectedIndex;
                 SelectBox.move(field_id + source, field_id + target);
@@ -287,11 +264,9 @@ Requires core.js and SelectBox.js.
                 source_box.selectedIndex = (old_index === source_box.length) ? source_box.length - 1 : old_index;
                 return;
             }
-            // down arrow -- wrap around
             if ((event.which && event.which === 40) || (event.keyCode && event.keyCode === 40)) {
                 source_box.selectedIndex = (source_box.length === source_box.selectedIndex + 1) ? 0 : source_box.selectedIndex + 1;
             }
-            // up arrow -- wrap around
             if ((event.which && event.which === 38) || (event.keyCode && event.keyCode === 38)) {
                 source_box.selectedIndex = (source_box.selectedIndex === 0) ? source_box.length - 1 : source_box.selectedIndex - 1;
             }

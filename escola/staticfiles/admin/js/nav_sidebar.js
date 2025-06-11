@@ -40,7 +40,7 @@
             }
             if (event.key === 'Escape') {
                 filterValue = '';
-                event.target.value = ''; // clear input
+                event.target.value = '';
             }
             let matches = false;
             for (const o of options) {
@@ -52,7 +52,6 @@
                         matches = true;
                     }
                 }
-                // show/hide parent <TR>
                 o.node.parentNode.parentNode.style.display = displayValue;
             }
             if (!filterValue || matches) {
