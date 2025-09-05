@@ -3,11 +3,40 @@
 {% block title %}Cadastro de Aluno{% endblock %}
 
 {% block content %}
-<h2>Cadastro de Aluno</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ aluno_form.as_p }}
-    <button type="submit">Cadastrar</button>
-</form>
+<div class="form-containerCadastro">
+    <div class="formLogin">
+        <a href="{% url 'login' %}" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <h2>Cadastro de Aluno</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in user_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            {% for field in aluno_form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+
+</div>
 {% endblock %}

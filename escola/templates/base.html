@@ -6,32 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema Escolar{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{% url 'home' %}" class="nav-logo">Sistema Escolar</a>
-            {% if user.is_authenticated %}
-                <div class="nav-menu">
-                    <a href="{% url 'home' %}" class="nav-item">Início</a>
-                    {% if user.is_staff %}
-                        <a href="{% url 'dashboard_professor' %}" class="nav-item">Dashboard</a>
-                    {% else %}
-                        <a href="{% url 'dashboard_aluno' %}" class="nav-item">Dashboard</a>
-                    {% endif %}
-                    <a href="{% url 'logout' %}" class="nav-item">Sair</a>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-
-    <main class="main-content">
-        {% block content %}
-        {% endblock %}
+    {% block header %}{% endblock %}
+    <main>
+        {% block content %}{% endblock %}
     </main>
-
-    <footer class="footer">
-        <p>&copy; 2025 Sistema Escolar. Todos os direitos reservados.</p>
-    </footer>
 </body>
 </html> 

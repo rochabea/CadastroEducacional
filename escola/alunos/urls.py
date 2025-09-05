@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     # Rota inicial do sistema
-    path('', views.home, name='home'),
+    path('', views.login_view, name='login'),
     
     # Rotas de autenticação
     path('login/', views.login_view, name='login'),

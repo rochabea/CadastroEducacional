@@ -9,7 +9,7 @@ from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
 
 # Página inicial do sistema
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'login.html')
 
 # Painel de controle do professor
 @login_required

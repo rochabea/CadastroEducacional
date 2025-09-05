@@ -1,66 +1,122 @@
 {% extends 'base.html' %}
 
 {% block title %}{% if editar %}Editar{% else %}Lançar{% endif %} Avaliação{% endblock %}
-
 {% block content %}
-<div class="form-container">
-    <h2>{% if editar %}Editar{% else %}Lançar{% endif %} Avaliação</h2>
+
+<div class="main">
+    <header>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-logo">Sistema Breach</a>
+            {% if user.is_authenticated %}
+                <div class="nav-menu">
+                    <a href="{% url 'home' %}" class="nav-item">Início</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard_professor' %}" class="nav-item">Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'dashboard_aluno' %}" class="nav-item">Dashboard</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="nav-item">Sair</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+<div class="form-container formLancarAvaliacao">
+
+<h2>{% if editar %}Editar{% else %}Lançar{% endif %} Avaliação</h2>
+
+<form method="post">
+    {% csrf_token %}
     
-    <form method="post">
-        {% csrf_token %}
-        
-        {% if form.errors %}
-            <div class="alert alert-error">
-                Por favor, corrija os erros abaixo.
-            </div>
+    {% if form.errors %}
+        <div class="alert alert-error">
+            Por favor, corrija os erros abaixo.
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="{{ form.aluno.id_for_label }}">Aluno:</label>
+        {{ form.aluno }}
+        {% if form.aluno.errors %}
+            <span class="error-message">{{ form.aluno.errors }}</span>
         {% endif %}
+    </div>
 
+    <div class="notas-grid">
         <div class="form-group">
-            <label for="{{ form.aluno.id_for_label }}">Aluno:</label>
-            {{ form.aluno }}
-            {% if form.aluno.errors %}
-                <span class="error-message">{{ form.aluno.errors }}</span>
+            <label for="{{ form.nota_b1.id_for_label }}">Nota do 1º Bimestre:</label>
+            {{ form.nota_b1 }}
+            {% if form.nota_b1.errors %}
+                <span class="error-message">{{ form.nota_b1.errors }}</span>
             {% endif %}
         </div>
 
-        <div class="notas-grid">
-            <div class="form-group">
-                <label for="{{ form.nota_b1.id_for_label }}">Nota do 1º Bimestre:</label>
-                {{ form.nota_b1 }}
-                {% if form.nota_b1.errors %}
-                    <span class="error-message">{{ form.nota_b1.errors }}</span>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label for="{{ form.nota_b2.id_for_label }}">Nota do 2º Bimestre:</label>
-                {{ form.nota_b2 }}
-                {% if form.nota_b2.errors %}
-                    <span class="error-message">{{ form.nota_b2.errors }}</span>
-                {% endif %}
-            </div>
-        </div>
-
         <div class="form-group">
-            <label for="{{ form.faltas.id_for_label }}">Número de Faltas:</label>
-            {{ form.faltas }}
-            {% if form.faltas.errors %}
-                <span class="error-message">{{ form.faltas.errors }}</span>
+            <label for="{{ form.nota_b2.id_for_label }}">Nota do 2º Bimestre:</label>
+            {{ form.nota_b2 }}
+            {% if form.nota_b2.errors %}
+                <span class="error-message">{{ form.nota_b2.errors }}</span>
             {% endif %}
         </div>
+    </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn-primary">{% if editar %}Atualizar{% else %}Salvar{% endif %} Avaliação</button>
-            <a href="{% url 'dashboard_professor' %}" class="btn-secondary">Cancelar</a>
-        </div>
-    </form>
+    <div class="form-group nFaltas">
+        <label for="{{ form.faltas.id_for_label }}">Número de Faltas:</label>
+        {{ form.faltas }}
+        {% if form.faltas.errors %}
+            <span class="error-message">{{ form.faltas.errors }}</span>
+        {% endif %}
+    </div>
+
+    <div class="form-actions">
+        <a href="{% url 'dashboard_professor' %}" class="btn-secondary">Cancelar</a>
+        <button type="submit" class="btn-primary">{% if editar %}Atualizar{% else %}Salvar{% endif %} Avaliação</button>
+    </div>
+</form>
+</div>
 </div>
 
+
 <style>
+
+body {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap: 100px;
+
+    main,header{  
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 100px;
+}
+
 .form-container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 40vw;
+    min-width: 400px;
+    min-height: 50vh;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 .notas-grid {
@@ -68,24 +124,39 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin: 20px 0;
+    .form-group input {
+    width: 90%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .form-group {
     margin-bottom: 15px;
+    padding: 0px 0px;
+}
+
+.nFaltas {
+    input{
+        width: 97%;
+    }
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
+    margin-right: 0px;
     font-weight: bold;
+    padding: 0px;
 }
 
-.form-group input, .form-group select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
+
 
 .error-message {
     color: #dc3545;
@@ -138,5 +209,45 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+
+.form-container h2 {
+    font-size: 36px;
+}
+
+/* Barra de Navegação */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-decoration: none !important;   
+}
+
+.nav-menu {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.nav-item:hover {
+    background-color: #34495e;
+}
+
 </style>
 {% endblock %} 
