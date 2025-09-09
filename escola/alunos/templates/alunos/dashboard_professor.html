@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard do Professor{% endblock %}
+{% block title %}rofessor{% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
     <h2>Dashboard do Professor</h2>
     
     <div class="dashboard-actions">
-        <a href="{% url 'lancar_avaliacao' %}" class="btn-primary">Lançar Nova Avaliação</a>
+        <a href="{% url 'lancar_avaliacao' %}" class="btn-novaAvaliacao">Lançar Nova Avaliação</a>
+        <a href="{% url 'exportar_pdf' %}" target="_blank" class="btn-pdf">Exportar em PDF</a>
     </div>
 
     <div class="avaliacoes-section">
@@ -81,6 +82,26 @@
     gap: 5px;
 }
 
+.btn-novaAvaliacao {
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    background-color: #112D4E;
+    color: #fff;
+    text-decoration: none;
+
+}
+
+.btn-pdf {
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    background-color: #DBE2EF;
+    color: #0F2C4E;
+    text-decoration: none;
+
+}
+
 .btn-edit, .btn-delete {
     padding: 4px 8px;
     border-radius: 4px;
@@ -104,6 +125,10 @@
 
 .btn-delete:hover {
     background-color: #c82333;
+}
+
+.dashboard-actions {
+    margin-bottom: 30px;
 }
 </style>
 {% endblock %} 
