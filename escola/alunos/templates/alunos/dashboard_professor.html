@@ -7,7 +7,8 @@
     <h2>Dashboard do Professor</h2>
     
     <div class="dashboard-actions">
-        <a href="{% url 'lancar_avaliacao' %}" class="btn-primary">Lançar Nova Avaliação</a>
+        <a href="{% url 'lancar_avaliacao' %}" class="btn-novaAvaliacao">Lançar Nova Avaliação</a>
+        <a href="{% url 'exportar_pdf' %}" target="_blank" class="btn-pdf">Exportar em PDF</a>
     </div>
 
     <div class="avaliacoes-section">
@@ -88,6 +89,18 @@
     font-size: 0.9em;
 }
 
+
+.btn-pdf {
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    background-color: #DBE2EF;
+    color: #0F2C4E;
+    text-decoration: none;
+    
+
+}
+
 .btn-edit {
     background-color: #007bff;
     color: white;
@@ -104,6 +117,21 @@
 
 .btn-delete:hover {
     background-color: #c82333;
+}
+
+.btn-novaAvaliacao {
+    padding: 7px 8px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    background-color: #112D4E;
+    color: #fff;
+    text-decoration: none;
+
+}
+
+.dashboard-actions {
+    height: auto;
+    padding-bottom: 20px;
 }
 </style>
 {% endblock %} 

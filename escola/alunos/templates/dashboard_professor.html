@@ -1,5 +1,6 @@
 <h2>Notas lançadas</h2>
 <a href="{% url 'lancar_avaliacao' %}">Lançar nova avaliação</a>
+
 <ul>
   {% for avaliacao in avaliacoes %}
     <li>{{ avaliacao.aluno }} - Média: {{ avaliacao.media }} - Status: {{ avaliacao.status }}</li>
