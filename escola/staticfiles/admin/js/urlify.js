@@ -1,4 +1,3 @@
-/*global XRegExp*/
 'use strict';
 {
     const LATIN_MAP = {
@@ -127,7 +126,7 @@
 
     const Downcoder = {
         'Initialize': function() {
-            if (Downcoder.map) { // already made
+            if (Downcoder.map) { 
                 return;
             }
             Downcoder.map = {};
@@ -147,23 +146,20 @@
 
 
     function URLify(s, num_chars, allowUnicode) {
-        // changes, e.g., "Petty theft" to "petty-theft"
         if (!allowUnicode) {
             s = downcode(s);
         }
-        s = s.toLowerCase(); // convert to lowercase
-        // if downcode doesn't hit, the char will be stripped here
+        s = s.toLowerCase(); 
         if (allowUnicode) {
-            // Keep Unicode letters including both lowercase and uppercase
-            // characters, whitespace, and dash; remove other characters.
+  
             s = XRegExp.replace(s, XRegExp('[^-_\\p{L}\\p{N}\\s]', 'g'), '');
         } else {
-            s = s.replace(/[^-\w\s]/g, ''); // remove unneeded chars
+            s = s.replace(/[^-\w\s]/g, ''); 
         }
-        s = s.replace(/^\s+|\s+$/g, ''); // trim leading/trailing spaces
-        s = s.replace(/[-\s]+/g, '-'); // convert spaces to hyphens
-        s = s.substring(0, num_chars); // trim to first num_chars chars
-        return s.replace(/-+$/g, ''); // trim any trailing hyphens
+        s = s.replace(/^\s+|\s+$/g, ''); 
+        s = s.replace(/[-\s]+/g, '-'); 
+        s = s.substring(0, num_chars); 
+        return s.replace(/-+$/g, ''); 
     }
     window.URLify = URLify;
 }

@@ -1,8 +1,6 @@
 'use strict';
 {
-    // Call function fn when the DOM is loaded and ready. If it is already
-    // loaded, call the function now.
-    // http://youmightnotneedjquery.com/#ready
+   
     function ready(fn) {
         if (document.readyState !== 'loading') {
             fn();
@@ -16,9 +14,9 @@
             event.preventDefault();
             const params = new URLSearchParams(window.location.search);
             if (params.has('_popup')) {
-                window.close(); // Close the popup.
+                window.close(); 
             } else {
-                window.history.back(); // Otherwise, go back.
+                window.history.back(); 
             }
         }
 

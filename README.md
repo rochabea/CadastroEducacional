@@ -27,15 +27,11 @@ Este projeto possui testes automatizados que validam funcionalidades importantes
 - Teste unitário;
 - Teste ponta a ponta;
 - Teste de integração de sistema;
-- Teste de aceite;
 - Teste de integração de unidades;
 - Teste de carga;
 - Teste de stress;
+- Teste de aceite;
 - Teste de interface do usuário;
-- Teste de caixa preta;
-- Teste de caixa branca.
-
-
 
 
 ## ⚙️ Requisitos
