@@ -8,11 +8,68 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: column; 
 
-    main{  
+    header{  
+        display: flex;
         width: 100%;
-        height: 100%;
+        max-height: 100px;
+        position: absolute;
+        top: 0;
+
+        .logo{
+            img{
+                width: 95px;
+                height: 95px;
+                cursor: pointer;
+            }
+        }
+
+        /* Estilos da barra de navegação */
+        .navbar {
+            width: 100%;
+            background-color: #183f6d;
+            padding: 5px 0;
+            box-shadow: 10px 0px 9px rgba(0, 0, 0, 0.482);
+        }
+
+            /* Barra de Navegação */
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            color: white;
+            font-size: 1.7rem;
+            font-weight: 400;
+            text-decoration: none !important;   
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.5s;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+
+        }
     }
 }
 
@@ -173,6 +230,55 @@ a:hover {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    h2{
+        text-align: center;
+        color: #3F72AF;
+    }
+
+    .dashboard-actions{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+
+        button{
+            background-color: #112D4E;
+            border-radius: 8px;
+            font-weight: 400;
+        }
+
+        .btn-secondary{
+            background-color: #DBE2EF;
+        }
+    }
+    
+    .infos{
+        height: 150px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap:20px;
+
+        .card{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap:5px;
+            width: 25%;
+            height: 100%;
+            border-radius: 16px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+            h1{
+                font-size: 42px;
+            }
+        }
+        
+    }
 
 }
 .titleDashboard{
@@ -186,6 +292,12 @@ a:hover {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    h3{
+        font-weight: bold;
+        margin: 0px;
+        text-align: start;
+    }
 }
 
 /* Estilos do boletim */
@@ -193,12 +305,6 @@ a:hover {
     margin-top: 20px;
 }
 
-/* Estilos da barra de navegação */
-.navbar {
-    background-color: #183f6d;
-    padding: 15px 0;
-    box-shadow: 10px 0px 9px rgba(0, 0, 0, 0.482);
-}
 
 /* Estilos do rodapé  */
 .footer {
@@ -248,9 +354,28 @@ a:hover {
     max-width: 600px;
     min-width: 60vw;
     min-height: 70vh;
-    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.099);
+    /* box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.099); */
     display: flex;
     flex-direction: row;
+
+    form{
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+.form-containerExclusao{
+    max-width: 600px;
+    min-width: 60vw;
+    min-height: 70vh;
+    /* box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.099); */
+    display: flex;
+    flex-direction: column !important;
+
+    form{
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 .form-containerCadastro{
@@ -269,6 +394,7 @@ a:hover {
     background-color: #112d4e;
     width: 50%;
     border-radius: 8px 0px 0px 8px;
+    box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.205);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -302,7 +428,7 @@ a:hover {
     border-radius: 0px 8px 8px 0px;
     width: 50%;
     padding: 20px;
-
+    box-shadow: 0px 0px 7px 4px rgba(0, 0, 0, 0.205);
     display: flex;
     flex-direction: column;
     justify-content: center;

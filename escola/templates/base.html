@@ -15,7 +15,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    {% block header %}{% endblock %}
+    {% if not request.path == '/login/' %}
+        <header>
+            <nav class="navbar">
+                <div class="nav-container">
+                    <div class="logo">
+                        <!-- <a href="{% url 'home' %}" class="nav-logo">Sistema Breach</a> -->
+                        <img href="{% url 'home' %}" src="{% static 'image/Imagem1.png' %}"  alt="">
+                    </div>
+                    {% if user.is_authenticated %}
+                        <div class="nav-menu">
+                            <a href="{% url 'home' %}" class="nav-item">Início</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'dashboard_professor' %}" class="nav-item">Dashboard</a>
+                            {% else %}
+                                <a href="{% url 'dashboard_aluno' %}" class="nav-item">Dashboard</a>
+                            {% endif %}
+                            <a href="{% url 'logout' %}" class="nav-item">Sair</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+    {% endif %}
+
     <main>
         {% block content %}{% endblock %}
     </main>

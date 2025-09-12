@@ -4,24 +4,6 @@
 {% block content %}
 
 <div class="main">
-    <header>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="{% url 'home' %}" class="nav-logo">Sistema Breach</a>
-            {% if user.is_authenticated %}
-                <div class="nav-menu">
-                    <a href="{% url 'home' %}" class="nav-item">Início</a>
-                    {% if user.is_staff %}
-                        <a href="{% url 'dashboard_professor' %}" class="nav-item">Dashboard</a>
-                    {% else %}
-                        <a href="{% url 'dashboard_aluno' %}" class="nav-item">Dashboard</a>
-                    {% endif %}
-                    <a href="{% url 'logout' %}" class="nav-item">Sair</a>
-                </div>
-            {% endif %}
-        </div>
-    </nav>
-</header>
 
 <div class="form-container formLancarAvaliacao">
 
@@ -83,15 +65,9 @@
 
 body {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     gap: 100px;
-
-    main,header{  
-        width: 100%;
-        height: 100%;
-    }
 }
 
 .main{
@@ -214,40 +190,7 @@ form{
     font-size: 36px;
 }
 
-/* Barra de Navegação */
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.nav-logo {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 400;
-    text-decoration: none !important;   
-}
-
-.nav-menu {
-    display: flex;
-    gap: 1rem;
-}
-
-.nav-item {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.nav-item:hover {
-    background-color: #34495e;
-}
 
 </style>
 {% endblock %} 

@@ -5,14 +5,42 @@
 {% block content %}
 <div class="dashboard-container">
     <h2>Dashboard do Professor</h2>
-    
+
+
     <div class="dashboard-actions">
-        <a href="{% url 'lancar_avaliacao' %}" class="btn-primary">Lançar Nova Avaliação</a>
+        <form action="{% url 'lancar_avaliacao' %}" method="get">
+            <button type="submit" class="btn-primary">Lançar Nova Avaliação</button>
+        </form>
+        {% if avaliacoes %}
+        <form action="{% url 'lancar_avaliacao' %}" method="get">
+            <button type="submit" class="btn-secondary">Exportar para PDF</button>
+        </form>
+        {% endif %}
     </div>
 
+    {% if avaliacoes %}
+    <div class="infos">
+        <div class="card">
+            <p>Total de Alunos</p>
+            <h1>25</h1>
+        </div>
+        <div class="card">
+            <p>Aprovados</p>
+            <h1>25</h1>
+        </div>
+        <div class="card">
+            <p>Reprovados</p>
+            <h1>7</h1>
+        </div>
+        <div class="card">
+            <p>Media Geral</p>
+            <h1>7,0</h1>
+        </div>
+    </div>
+    
+
     <div class="avaliacoes-section">
-        <h3>Avaliações Lançadas</h3>
-        {% if avaliacoes %}
+        <h3>Avaliações Lançadas</h3>   
             <table class="table">
                 <thead>
                     <tr>
@@ -59,6 +87,10 @@
     padding: 4px 8px;
     border-radius: 4px;
     font-weight: bold;
+}
+
+.dashboard-actions {
+    text-align: center;
 }
 
 .status-aprovado {
