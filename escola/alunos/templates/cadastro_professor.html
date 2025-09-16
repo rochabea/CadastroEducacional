@@ -1,8 +1,14 @@
-{% extends 'base.html' %}
-
-{% block title %}Cadastro de Professor{% endblock %}
+{% load static %}
 
 {% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+
+
 <div class="form-containerCadastro">
     <div class="formLogin">
         <a href="{% url 'login' %}" class="btn-back">
