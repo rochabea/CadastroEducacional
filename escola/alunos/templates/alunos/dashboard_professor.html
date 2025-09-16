@@ -12,7 +12,7 @@ avaliacoes-section{% extends 'base.html' %}
             <button type="submit" class="btn-primary">Lançar Nova Avaliação</button>
         </form>
         {% if avaliacoes %}
-        <form action="{% url 'lancar_avaliacao' %}" method="get">
+        <form action="{% url 'exportar_pdf' %}" method="get">
             <button type="submit" class="btn-secondary">Exportar para PDF</button>
         </form>
         {% endif %}
@@ -22,19 +22,19 @@ avaliacoes-section{% extends 'base.html' %}
     <div class="infos">
         <div class="card">
             <p>Total de Alunos</p>
-            <h1>25</h1>
+            <h1>{{ total_alunos }}</h1>
         </div>
         <div class="card">
             <p>Aprovados</p>
-            <h1>25</h1>
+            <h1>{{ total_aprovados }}</h1>
         </div>
         <div class="card">
             <p>Reprovados</p>
-            <h1>7</h1>
+            <h1>{{ total_reprovados }}</h1>
         </div>
         <div class="card">
             <p>Media Geral</p>
-            <h1>7,0</h1>
+            <h1>{{ media_geral }}</h1>
         </div>
     </div>
     
@@ -85,8 +85,15 @@ avaliacoes-section{% extends 'base.html' %}
         <h3>Feedback Professor(a)</h3>
         <article>
             <div class="labelAuto">
-                <label for="{{ form.aluno.id_for_label }}">Aluno:</label>
-                <input type="text" class="inputNome" placeholder="Escolha um Aluno">
+                <label for="aluno">Aluno: </label>
+                <select name="aluno" id="aluno" class="inputNome">
+                    <option value="" disabled selected>Escolha um aluno</option>
+                    {% for aluno in alunos %}
+                        <option value="{{ aluno.id }}">
+                            {{ aluno.user.first_name }} {{ aluno.user.last_name }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="descricao">
                 <label for="{{ form.aluno.id_for_label }}">Texto:</label>

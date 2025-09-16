@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from .models import Avaliacao, Aluno, Professor
 from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
+from fpdf import FPDF
 
 # Página inicial do sistema
 def home(request):
@@ -20,7 +21,22 @@ def dashboard_professor(request):
                      .filter(professor=professor)
                      .select_related('aluno', 'aluno__user')
                      .order_by('aluno__user__first_name', 'aluno__user__last_name'))
-        return render(request, 'alunos/dashboard_professor.html', {'avaliacoes': avaliacoes})
+        total_alunos = Aluno.objects.count()
+        total_aprovados = avaliacoes.filter(status="Aprovado").count()
+        total_reprovados = avaliacoes.filter(status="Reprovado").count()
+
+        medias = [a.media for a in avaliacoes if a.media is not None]
+        media_geral = round(sum(medias) / len(medias), 1) if medias else 0
+
+        alunos = Aluno.objects.select_related("user").all().order_by("user__first_name", "user__last_name")
+
+        return render(request, 'alunos/dashboard_professor.html', 
+               {'avaliacoes': avaliacoes,
+                'total_alunos': total_alunos,
+                'total_aprovados': total_aprovados,
+                'total_reprovados': total_reprovados,
+                'media_geral': media_geral,
+                'alunos' : alunos})
     except Professor.DoesNotExist:
         return redirect('home')
 
@@ -67,6 +83,43 @@ def boletim_aluno(request):
     except Aluno.DoesNotExist:
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
+
+
+#função para exportar o pdf
+@login_required
+def gerar_os(request):
+    #cria o PDF
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    #título do pdf
+    pdf.cell(200,10, txt="Boletim", ln=True, align="C")
+
+    #busca de dados
+    avaliacoes = Avaliacao.objects.all()
+
+    pdf.ln(10)
+
+    #cabecalho
+    pdf.set_font("Arial", style="B",size=12)
+    pdf.cell(60,10, "Aluno", 1)
+    pdf.cell(40,10, "Média", 1)
+    pdf.cell(40,10, "Status", 1)
+    pdf.ln()
+
+    pdf.set_font("Arial", size=12)
+    for avaliacao in avaliacoes:
+        pdf.cell(60,10, str(avaliacao.aluno), 1)
+        pdf.cell(40,10, str(avaliacao.media), 1)
+        pdf.cell(40,10, str(avaliacao.status), 1)
+        pdf.ln()
+
+    #retorno de pdf
+    response = HttpResponse(pdf.output(dest='S').encode('latin-1'), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="notas.pdf"'
+    return response
 
 
 
@@ -218,6 +271,7 @@ def consulta_avaliacoes(request):
     except Aluno.DoesNotExist:
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
+
 
 
 # Gerencia o processo de logout dos usuários

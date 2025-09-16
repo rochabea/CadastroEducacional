@@ -30,4 +30,7 @@ urlpatterns = [
     path('avaliacoes/lista/', views.lista_avaliacoes, name='lista_avaliacoes'),
     path('avaliacoes/consulta/', views.consulta_avaliacoes, name='consulta_avaliacoes'),
 
+    #Rota para exportar o pdf
+    path('exportar-pdf/', views.gerar_os, name="exportar_pdf")
+
 ]
