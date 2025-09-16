@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+avaliacoes-section{% extends 'base.html' %}
 
 {% block title %}Dashboard do Professor{% endblock %}
 
@@ -80,9 +80,60 @@
             </div>
         {% endif %}
     </div>
+
+    <div class="feedBack">
+        <h3>Feedback Professor(a)</h3>
+        <article>
+            <div class="labelAuto">
+                <label for="{{ form.aluno.id_for_label }}">Aluno:</label>
+                <input type="text" class="inputNome" placeholder="Escolha um Aluno">
+            </div>
+            <div class="descricao">
+                <label for="{{ form.aluno.id_for_label }}">Texto:</label>
+                <input type="text" class="inputFeed">
+            </div>
+        </article>
+    </div>
 </div>
 
 <style>
+
+.feedBack{
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    h3{
+        margin: 0px;
+        margin-bottom: 20px;
+    }
+
+    article{
+       display: flex;
+       flex-direction: row;
+       gap: 32px;
+
+       .descricao{
+        background-color: #DBE2EF;
+        padding: 12px;
+        border-radius: 12px;
+        width: 100%;
+        .inputFeed{
+            background-color: #DBE2EF;
+            height: 150px;
+        }
+       }
+
+       .inputNome{
+            background-color: #DBE2EF;
+            border-radius: 32px;
+            width: 100%;
+       }
+    }
+}
+
+
 .status-badge {
     padding: 4px 8px;
     border-radius: 4px;

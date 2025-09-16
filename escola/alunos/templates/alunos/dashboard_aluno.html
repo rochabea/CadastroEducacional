@@ -6,7 +6,6 @@
 <div class="dashboard-container">
     <h2 class="titleDashboard">Dashboard do Aluno</h2>
     
-    
 
     <div class="avaliacoes-section">
         <h3>Minhas Avaliações Recentes</h3>
@@ -43,5 +42,128 @@
             <p class="no-data">Você ainda não possui avaliações registradas.</p>
         {% endif %}
     </div>
+
+    <div class="contato">
+        <h3>Contatar Professor(a)</h3>
+        <button type="submit" class="btn-primary">professor.prof@p.ucb.br</button>
+        <button type="submit" class="btn-secondary">(61) 4848-5452</button>
+    </div>
+    
+    <div class="informacoes">
+        <h3>Informações</h3>
+        <div>
+            <article>
+                <label>Nome:</label>
+                <p>Matheus Dias</p>
+            </article>
+            <article>
+                <label>Idade:</label>
+                <p>23</p>
+            </article>
+        </div>
+
+        <div>
+            <article>
+                <label>Curso:</label>
+                <p>Eng. de Software</p>
+            </article>
+            <article>
+                <label>Disciplina:</label>
+                <p>Análise e Proj.</p>
+            </article>
+        </div>
+
+        <div>
+            <article>
+                <label>Matrícula:</label>
+                <p>34567890</p>
+            </article>
+            <article>
+                <label>Email:</label>
+                <p>matheuzin@a.ucb.br</p>
+            </article>
+        </div>
+    </div>
+    
+    <div class="feedBack">
+        <h3>Feedback Professor(a)</h3>
+        <div class="descricao">
+            <label for="{{ form.aluno.id_for_label }}">Texto:</label>
+            <input type="text" class="inputFeed">
+        </div>
+    </div>
 </div>
+
+<style>
+    .avaliacoes-section{
+        .status-reprovado{
+            background: red;
+            border-radius: 9px;
+            padding: 5px;
+            color: white;         
+        }
+
+        .status-aprovado{
+            background: green;
+            border-radius: 9px;
+            padding: 5px;
+            color: white;         
+        }
+    }
+
+    .contato, .informacoes, .feedBack{
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      h3{
+        margin: 0px;
+        margin-bottom: 12px;
+      };
+    }
+
+    .contato{
+        .btn-primary{
+            background-color: #112D4E;
+            border-radius: 47px;
+        }
+        .btn-secondary{
+            background-color: #3F72AF;
+            color: white;
+            font-weight: 400;
+            border-radius: 47px;
+        }
+    }
+
+    .informacoes{
+        div{
+            display: flex;
+            flex-direction: row;
+            width:100%;
+            article{
+                width: 50%;
+            }
+        }
+    }
+
+    .feedBack{
+      h3{
+        margin: 0px;
+        margin-bottom: 12px;
+      }
+        .descricao{
+            background-color: #DBE2EF;
+            padding: 12px;
+            border-radius: 12px;
+            width: 95%;
+            display: flex;
+            .inputFeed{
+                background-color: #DBE2EF;
+                height: 150px;
+            }
+        }
+    }
+</style>
+
 {% endblock %} 

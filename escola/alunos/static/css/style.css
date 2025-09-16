@@ -73,6 +73,11 @@ body {
     }
 }
 
+main{
+    position: absolute;
+    top:  100px;
+}
+
 
 /* Container principal */
 .container {
