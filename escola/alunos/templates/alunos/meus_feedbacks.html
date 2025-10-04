@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Meus feedbacks</h2>
+
+  {% if feedbacks %}
+    <ul>
+      {% for fb in feedbacks %}
+        <li style="margin-bottom:12px;">
+          <div><strong>Professor:</strong>
+            {{ fb.professor.user.get_full_name|default:fb.professor.user.username }}
+          </div>
+          <div><small>{{ fb.criado_em|date:"d/m/Y H:i" }}</small></div>
+          <div>{{ fb.texto }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+      <nav>
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">← Anterior</a>
+        {% endif %}
+        <span>página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">Próxima →</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <p>Você ainda não possui feedbacks.</p>
+  {% endif %}
+{% endblock %}

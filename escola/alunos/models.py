@@ -82,3 +82,28 @@ class Avaliacao(models.Model):
             raise ValidationError("Nota B1 inválida: deve estar entre 0 e 10.")
         if not (0 <= self.nota_b2 <= 10):
             raise ValidationError("Nota B2 inválida: deve estar entre 0 e 10.")
+
+# classe feedback do professor para o aluno
+class Feedback(models.Model):
+    # se um aluno for remevido todos os feedbacks dele serão removidos -> CASCADE
+    aluno = models.ForeignKey(Aluno, on_delete=models.CASCADE, related_name='feedbacks')
+    # se um professor for removido, o feedback permanece, mas o campo professor fica nulo -> SET_NULL
+    # related_name -> acessar todos os feedbacjs criados por esse professor
+    professor = models.ForeignKey(Professor, on_delete=models.SET_NULL, null=True, blank=True, related_name='feedbacks')
+    # campo de texto do feedback
+    texto = models.TextField()
+    # campo para indicar se o feedback é visível para o aluno
+    visivel_para_aluno = models.BooleanField(default=True)
+    # data e hora em que o feedback foi criado automaticamente
+    criado_em = models.DateTimeField(auto_now_add=True)
+    # data e hora da última atualização
+    atualizado_em = models.DateTimeField(auto_now=True)
+    class Meta:
+        # ordena pelo mais recente
+        ordering = ['-criado_em']
+        # índice no bd para otimizar consultas por aluno e data de criação
+        indexes = [models.Index(fields=['aluno', '-criado_em'])]
+
+    # representação legível no admin e nos logs
+    def __str__(self):
+        return f'Feedback para {self.aluno} por {getattr(self.professor, "nome", "—")}'

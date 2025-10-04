@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Meus feedbacks (professor)</h2>
+  <p><a href="{% url 'feedback-create' %}">+ Novo feedback</a></p>
+
+  {% if feedbacks %}
+    <ul>
+      {% for fb in feedbacks %}
+        <li style="margin-bottom:12px;">
+          <div><strong>Aluno:</strong>
+            {{ fb.aluno.user.get_full_name|default:fb.aluno.user.username }}
+          </div>
+          <div><small>{{ fb.criado_em|date:"d/m/Y H:i" }}</small></div>
+          <div>{{ fb.texto }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não cadastrou feedbacks.</p>
+  {% endif %}
+{% endblock %}
