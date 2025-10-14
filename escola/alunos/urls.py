@@ -1,6 +1,7 @@
 
 from django.urls import path
 from . import views
+from .views import MeusFeedbacksView, FeedbackCreateView, MeusFeedbacksProfessorView
 
 urlpatterns = [
     # Rota inicial do sistema
@@ -34,9 +35,20 @@ urlpatterns = [
     path('exportar-pdf/', views.gerar_os, name="exportar_pdf"),
 
     #Rota para acessar a página de feedback
-    path('dashboard/feedback/', views.feedback_view, name='feedback_view'),
+    #path('dashboard/feedback/', views.feedback_view, name='feedback_view'),
 
-    #Rota para acessar a página de feedback
-    path('dashboard/presenca/', views.presenca_view, name='presenca_view')
+    #Rota para acessar a página de presença de alunos
+    path('dashboard/presenca_alunos/', views.presenca_alunos, name='presenca_alunos'),
+
+    #Rota para acessar a página de presença de professores
+    path('dashboard/presenca_professor/', views.presenca_professor, name='presenca_professor'),
+
+    #Rota para acessar a página de quadro de horários
+    path('dashboard/quadro_horario/', views.quadro_view, name='quadro_view'),
+
+    # Rotas de feedback
+    path('aluno/feedbacks/', MeusFeedbacksView.as_view(), name='aluno-meus-feedbacks'),
+    path('professor/feedbacks/novo/', FeedbackCreateView.as_view(), name='feedback-create'),
+    path('professor/feedbacks/', MeusFeedbacksProfessorView.as_view(), name='prof-meus-feedbacks'),
 
 ]

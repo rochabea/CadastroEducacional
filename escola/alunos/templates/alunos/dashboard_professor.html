@@ -82,33 +82,43 @@ avaliacoes-section{% extends 'base_professor.html' %}
             </div>
         {% endif %}
     </div>
-    <div class="feedBack">
-        <h3>Feedback Professor(a)</h3>
-        <article>
-            <div class="labelAuto">
-                <label for="aluno">Aluno: </label>
-                <select name="aluno" id="aluno" class="inputNome">
-                    <option value="" disabled selected>Escolha um aluno</option>
-                    {% for aluno in alunos %}
-                        <option value="{{ aluno.id }}">
-                            {{ aluno.user.first_name }} {{ aluno.user.last_name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="descricao">
-                <label for="{{ form.aluno.id_for_label }}">Texto:</label>
-                <input type="text" class="inputFeed">
-            </div>
-        </article>
-    </div>
 
+
+<div class="feedBack">
+  <h2>Feedbacks</h2>
+  <div class="feedbackLabel"><p><a href="{% url 'feedback-create' %}">+ Novo feedback</a></p>
+
+  {% if feedbacks %}
+    <ul>
+      {% for fb in feedbacks %}
+        <li style="margin-bottom:12px;">
+          <div><strong>Aluno:</strong>
+            {{ fb.aluno.user.get_full_name|default:fb.aluno.user.username }}
+          </div>
+          <div><small>{{ fb.criado_em|date:"d/m/Y H:i" }}</small></div>
+          <div>{{ fb.texto }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não cadastrou feedbacks.</p>
+  {% endif %}
+  </div>
+</div>
 
 </div>
 
 <style>
 
 
+.feedbackLabel{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 32px;
+    padding: 1px
+}
 
 .status-badge {
     padding: 4px 8px;
@@ -177,9 +187,9 @@ avaliacoes-section{% extends 'base_professor.html' %}
 }
 
 
-        .feedBack{
+    .feedBack{
     background: #fff;
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 

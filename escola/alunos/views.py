@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, CreateView
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .models import Avaliacao, Aluno, Professor
+from .models import Avaliacao, Aluno, Professor, Feedback
 from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
 from fpdf import FPDF
 
@@ -262,11 +266,17 @@ def lista_avaliacoes(request):
     # Retorno simples para os testes funcionarem
     return HttpResponse("Lista de avaliações")
 
-def feedback_view(request):
-    return render(request, 'alunos/feedback.html')
+#def feedback_view(request):
+#    return render(request, 'alunos/feedback.html')
 
-def presenca_view(request):
-    return render(request, 'alunos/presenca.html')
+def presenca_alunos(request):
+    return render(request, 'alunos/presenca_alunos.html')
+
+def presenca_professor(request):
+    return render(request, 'alunos/presenca_professor.html')
+
+def quadro_view(request):
+    return render(request, 'alunos/quadro_horario.html')
 
 @login_required
 def consulta_avaliacoes(request):
@@ -286,6 +296,67 @@ def logout_view(request):
         logout(request)
         return redirect('home')
     return render(request, 'login.html')
+
+# Aluno vê os próprios feedbacks -> apenas usuários autenticados acessam a página
+class MeusFeedbacksView(LoginRequiredMixin, ListView):
+    # indica a tabela
+    model = Feedback
+    # qual template usar
+    template_name = 'alunos/meus_feedbacks.html'
+    # nome da variável no template
+    context_object_name = 'feedbacks'
+    # nº de itens por página
+    paginate_by = 10
+
+    def get_queryset(self):
+        # user -> aluno
+        if hasattr(self.request.user, 'aluno'):
+            # se for aluno retorna apenas o feedback dele e os vísiveis para ele
+            return (Feedback.objects
+                    .filter(aluno=self.request.user.aluno, visivel_para_aluno=True)
+                    # join com o banco para tarzer o porfessor e o user do professor (reduzir queries)
+                    .select_related('professor__user')
+                    # ordem dos mais novas para os mais antigos
+                    .order_by('-criado_em'))
+        return Feedback.objects.none()
+
+# Professor cria feedback (fora do admin) 
+class ProfessorRequiredMixin(UserPassesTestMixin):
+    # apenas quem tem relação: user -> professor
+    def test_func(self):
+        return hasattr(self.request.user, 'professor')
+
+    # em caso de erro, não irá redirecionar mas lançar um 403
+    def handle_no_permission(self):
+        from django.core.exceptions import PermissionDenied
+        raise PermissionDenied("Apenas professores podem acessar esta página.")
+
+# para onde redirecionar swpoisa de salvar (lista do professor)
+class FeedbackCreateView(LoginRequiredMixin, ProfessorRequiredMixin, CreateView):
+    model = Feedback
+    fields = ['aluno', 'texto', 'visivel_para_aluno']   # professor é setado no form_valid
+    template_name = 'alunos/feedback_create.html'
+    success_url = reverse_lazy('prof-meus-feedbacks')
+
+    # força o vínculo do feedback ao professor logado
+    def form_valid(self, form):
+        form.instance.professor = self.request.user.professor
+        # Regra: restringir alunos que este professor pode avaliar.
+        return super().form_valid(form)
+
+# Professor lista o que ele criou 
+class MeusFeedbacksProfessorView(LoginRequiredMixin, ProfessorRequiredMixin, ListView):
+    model = Feedback
+    template_name = 'alunos/meus_feedbacks_prof.html'
+    context_object_name = 'feedbacks'
+    paginate_by = 10
+    # lista apenas os feedbacks criados por esse professor
+    def get_queryset(self):
+        return (Feedback.objects
+                .filter(professor=self.request.user.professor)
+                # otimiza as queries trazendo aluno e user do aluno
+                .select_related('aluno__user')
+                .order_by('-criado_em'))
 
 
 

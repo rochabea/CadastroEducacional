@@ -1,26 +1,34 @@
-{% extends 'base.html' %}
+{% extends 'base_professor.html' %}
 {% block content %}
-<div class="feedBack">
-        <h3>Feedback Professor(a)</h3>
-        <article>
-            <div class="labelAuto">
-                <label for="aluno">Aluno: </label>
-                <select name="aluno" id="aluno" class="inputNome">
-                    <option value="" disabled selected>Escolha um aluno</option>
-                    {% for aluno in alunos %}
-                        <option value="{{ aluno.id }}">
-                            {{ aluno.user.first_name }} {{ aluno.user.last_name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="descricao">
-                <label for="{{ form.aluno.id_for_label }}">Texto:</label>
-                <input type="text" class="inputFeed">
-            </div>
-        </article>
-        
-    </div>
+  <h2>Meus feedbacks</h2>
+
+  {% if feedbacks %}
+    <ul>
+      {% for fb in feedbacks %}
+        <li style="margin-bottom:12px;">
+          <div><strong>Professor:</strong>
+            {{ fb.professor.user.get_full_name|default:fb.professor.user.username }}
+          </div>
+          <div><small>{{ fb.criado_em|date:"d/m/Y H:i" }}</small></div>
+          <div>{{ fb.texto }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+      <nav>
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">← Anterior</a>
+        {% endif %}
+        <span>página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">Próxima →</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <p>Você ainda não possui feedbacks.</p>
+  {% endif %}
     
     <div class="contato">
         <h3>Contatar Professor(a)</h3>

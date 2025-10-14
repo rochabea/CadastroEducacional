@@ -40,9 +40,9 @@
     <div class="nav-container">
       {% if user.is_authenticated %}
       <div class="nav-menu">
-        <a href="{% url 'dashboard/professor' %}"><i class="fa-solid fa-house iconUser"></i></a>
-        <a href="{% url 'feedback_view' %}"><i class="fa-solid fa-calendar-days iconUser"></i></a>
-        <a href="{% url 'presenca_view' %}"><i class="fa-solid fa-graduation-cap iconUser"></i></a>
+        <a href="{% url 'dashboard_professor' %}"><i class="fa-solid fa-house iconUser"></i></a>
+        <a href="{% url 'quadro_view' %}"><i class="fa-solid fa-calendar-days iconUser"></i></a>
+        <a href="{% url 'presenca_professor' %}"><i class="fa-solid fa-graduation-cap iconUser"></i></a>
       </div>
       {% endif %}
     </div>

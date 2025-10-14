@@ -41,9 +41,9 @@
       {% if user.is_authenticated %}
       <div class="nav-menu">
         <a href="{% url 'dashboard_aluno'%}"><i class="fa-solid fa-house iconUser"></i></a>
-        <a href="{% url 'presenca_view'%}"<i class="fa-solid fa-calendar-days iconUser"></i>
-        <a href="{% url 'feedback_view'%}"><i class="fa-solid fa-comments iconUser"></i></a>
-        <i class="fa-solid fa-graduation-cap iconUser"></i>
+        <a href="{% url 'quadro_view'%}"<i class="fa-solid fa-calendar-days iconUser"></i>
+        <a href="{% url 'aluno-meus-feedbacks' %}"><i class="fa-solid fa-comments iconUser"></i></a>
+        <a href="{% url 'presenca_professor' %}"><i class="fa-solid fa-graduation-cap iconUser"></i></a>
       </div>
       {% endif %}
     </div>
