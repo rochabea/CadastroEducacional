@@ -1,4 +1,6 @@
-    <div class="feedBack">
+{% extends 'base.html' %}
+{% block content %}
+<div class="feedBack">
         <h3>Feedback Professor(a)</h3>
         <article>
             <div class="labelAuto">
@@ -17,7 +19,15 @@
                 <input type="text" class="inputFeed">
             </div>
         </article>
+        
     </div>
+    
+    <div class="contato">
+        <h3>Contatar Professor(a)</h3>
+        <button type="submit" class="btn-primary">professor.prof@p.ucb.br</button>
+        <button type="submit" class="btn-secondary">(61) 4848-5452</button>
+    </div>
+    
 
 
     <style>
@@ -55,4 +65,17 @@
        }
     }
 }
+    .contato{
+        .btn-primary{
+            background-color: #112D4E;
+            border-radius: 47px;
+        }
+        .btn-secondary{
+            background-color: #3F72AF;
+            color: white;
+            font-weight: 400;
+            border-radius: 47px;
+        }
+    }
     </style>
+{% endblock %}

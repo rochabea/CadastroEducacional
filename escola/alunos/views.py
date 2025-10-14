@@ -262,6 +262,12 @@ def lista_avaliacoes(request):
     # Retorno simples para os testes funcionarem
     return HttpResponse("Lista de avaliações")
 
+def feedback_view(request):
+    return render(request, 'alunos/feedback.html')
+
+def presenca_view(request):
+    return render(request, 'alunos/presenca.html')
+
 @login_required
 def consulta_avaliacoes(request):
     try:
