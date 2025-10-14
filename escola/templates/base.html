@@ -16,29 +16,40 @@
 </head>
 <body>
     {% if not request.path == '/login/' %}
-        <header>
-            <nav class="navbar">
-                <div class="nav-container">
-                    <div class="logo">
-                        <!-- <a href="{% url 'home' %}" class="nav-logo">Sistema Breach</a> -->
-                        <img href="{% url 'home' %}" src="{% static 'image/Imagem1.png' %}"  alt="">
-                    </div>
-                    {% if user.is_authenticated %}
-                        <div class="nav-menu">
-                            <a href="{% url 'home' %}" class="nav-item">Início</a>
-                            {% if user.is_staff %}
-                                <a href="{% url 'dashboard_professor' %}" class="nav-item">Dashboard</a>
-                            {% else %}
-                                <a href="{% url 'dashboard_aluno' %}" class="nav-item">Dashboard</a>
-                            {% endif %}
-                            <a href="{% url 'logout' %}" class="nav-item">Sair</a>
-                        </div>
-                    {% endif %}
-                </div>
-            </nav>
-        </header>
-    {% endif %}
+<header class="menuSuperior">
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <img src="{% static 'image/logoIcon.png' %}" alt="Logo">
+      </div>
+      <div class="titleCenter">
+        <h2>BREACH SYSTEM</h2>
+      </div>
 
+      {% if user.is_authenticated %}
+      <div class="nav-menu">
+        <i href="{% url 'logout' %}" class="fa-solid fa-user iconUser"></i>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+</header>
+
+<aside class="menuLateral">
+  <nav class="navbarLateral">
+    <div class="nav-container">
+      {% if user.is_authenticated %}
+      <div class="nav-menu">
+        <i class="fa-solid fa-house iconUser"></i>
+        <i class="fa-solid fa-calendar-days iconUser"></i>
+        <i class="fa-solid fa-comments iconUser"></i>
+        <i class="fa-solid fa-graduation-cap iconUser"></i>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+</aside>
+    {% endif %}
     <main>
         {% block content %}{% endblock %}
     </main>

@@ -279,7 +279,7 @@ def logout_view(request):
     if request.method == 'POST':
         logout(request)
         return redirect('home')
-    return render(request, 'logout.html')
+    return render(request, 'login.html')
 
 
 
