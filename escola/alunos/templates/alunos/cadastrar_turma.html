@@ -1,0 +1,132 @@
+{% extends 'base_professor.html' %}
+
+{% block title %}Cadastrar nova turma{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-actions">
+        <div>
+            <h2>Cadastrar nova turma</h2>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="body">
+        <form method="POST" action="{% url 'cadastrar_turma_view' %}">
+            {% csrf_token %}
+            <div class="form-group2">
+                <label for="codigo_turma">Código da turma:</label>
+                <input type="text" id="codigo_turma" name="codigo_turma" class="form-input2" required>
+            </div>
+
+            <div class="form-group2">
+                <label for="aluno_select">Informe os alunos que irão compor a turma:</label>
+                <select id="aluno_select" class="form-input" >
+                    <option value="">Escolha um Aluno</option>
+                    {% for aluno in alunos %}
+                        <option value="{{ aluno.id }}">{{ aluno.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="alunos-container">
+                <strong>Alunos:</strong>
+                <ul id="lista_alunos"></ul>
+            </div>
+
+            <input type="hidden" name="alunos_ids" id="alunos_ids">
+            
+            <div class="footerBtn">
+                <button type="submit" class="btn-submit">Cadastrar nova turma</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.body{        
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 50%;
+    form{
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    input[type="text"]{
+        width: auto !important;
+    }
+}
+
+
+
+.form-group2 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 0px !important;
+}
+
+.form-input2 {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+
+.alunos-container {
+    height: 200px;
+    background: #e0e7ff;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.alunos-container ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.alunos-container li {
+    padding: 5px 0;
+}
+
+.btn-submit {
+    background-color: #112D4E;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #0f2440;
+}
+
+.footerBtn{
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+</style>
+
+
+{% endblock %}

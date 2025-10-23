@@ -1,0 +1,141 @@
+{% extends 'base_professor.html' %}
+
+{% block title %}Presença do Professor{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-actions">
+        <div>
+            <h2>Presença e Faltas</h2>
+            <a href="{% url 'cadastrar_turma_view' %}">
+                <button>Cadastrar nova turma</button>
+            </a>        
+        </div>
+    </div>
+
+    <form method="get" action="{% url 'presenca_professor' %}" style="margin-bottom: 15px;">
+        <label for="disciplina">Filtrar por disciplina:</label>
+        <select name="disciplina" id="disciplina" onchange="this.form.submit()">
+            <option value="todas" {% if disciplina_filtro == 'todas' %}selected{% endif %}>Todas</option>
+            {% for d in disciplinas %}
+                <option value="{{ d }}" {% if disciplina_filtro == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <!-- Tabela de presença -->
+    <div class="tabela-container">
+        <table class="tabela-presenca">
+            <thead>
+                <tr>
+                    <th>Aluno</th>
+                    <th>Disciplina</th>
+                    <th>Data</th>
+                    <th>Presente</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro.aluno }}</td>
+                    <td>{{ registro.disciplina }}</td>
+                    <td>{{ registro.data }}</td>
+                    <td><input type="checkbox" {% if registro.presente %}checked{% endif %}></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">Nenhum registro encontrado</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.dashboard-actions {
+    display: flex;
+    width: 100%;
+    justify-content: space-between !important;
+    align-items: center;
+    text-align: center;
+    flex-direction: row !important;
+}
+
+.dashboard-actions div:nth-child(1) {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.tabela-presenca {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabela-presenca th, .tabela-presenca td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+.tabela-container {
+    overflow-x: auto;
+}
+
+.tabela-presenca {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.tabela-presenca th, .tabela-presenca td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.tabela-presenca thead th {
+    background-color: #112D4E;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.tabela-presenca tbody tr:nth-child(even){
+    background-color: #f0f4f8;
+}
+
+.tabela-presenca tbody tr:hover {
+    background-color: #dbe6f1;
+    transition: 0.2s;
+}
+
+.tabela-presenca td input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.tabela-presenca tbody {
+    background-color: #FFFFFF;
+    border: 2px solid #112D4E; 
+    border-radius: 0 0 12px 12px; 
+}
+
+.tabela-presenca tbody td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #112D4E;
+}
+
+.tabela-presenca tbody tr:nth-child(even){
+    background-color: #f0f4f8;
+}
+
+</style>
+{% endblock %}

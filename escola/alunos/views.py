@@ -272,11 +272,8 @@ def lista_avaliacoes(request):
 def presenca_alunos(request):
     return render(request, 'alunos/presenca_alunos.html')
 
-def presenca_professor(request):
-    return render(request, 'alunos/presenca_professor.html')
-
-def quadro_view(request):
-    return render(request, 'alunos/quadro_horario.html')
+def cadastrar_turma_view(request):
+    return render(request, 'alunos/cadastrar_turma.html')
 
 @login_required
 def consulta_avaliacoes(request):
@@ -288,7 +285,45 @@ def consulta_avaliacoes(request):
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
 
+def presenca_professor_view(request):
+    # Dados de exemplo
+    registros = [
+        {"id": 1, "aluno": "João Silva", "disciplina": "POO", "data": "11/10/2025", "presente": True},
+        {"id": 2, "aluno": "Maria Souza", "disciplina": "Processo de Negócios", "data": "10/10/2025", "presente": False},
+        {"id": 3, "aluno": "Carlos Pereira", "disciplina": "Banco de Dados", "data": "09/10/2025", "presente": True},
+        {"id": 4, "aluno": "Ana Costa", "disciplina": "Algoritmos", "data": "12/10/2025", "presente": True},
+        {"id": 5, "aluno": "Rafael Lima", "disciplina": "Engenharia de Software", "data": "08/10/2025", "presente": False},
+        {"id": 6, "aluno": "Fernanda Oliveira", "disciplina": "Redes de Computadores", "data": "07/10/2025", "presente": True},
+    ]
 
+    # Pega disciplina selecionada no filtro (GET)
+    disciplina_filtro = request.GET.get('disciplina', 'todas')
+
+    # Lista de disciplinas únicas
+    disciplinas_unicas = sorted(set(r['disciplina'] for r in registros))
+
+    # Filtra registros se a disciplina não for "todas"
+    if disciplina_filtro != 'todas':
+        registros = [r for r in registros if r['disciplina'] == disciplina_filtro]
+
+    return render(request, 'alunos/presenca_professor.html', {
+        "registros": registros,
+        "disciplinas": disciplinas_unicas,
+        "disciplina_filtro": disciplina_filtro,
+    })
+
+def quadro_view(request):
+    # Horários fixos com 3 fileiras cada e matérias de T.I.
+    horarios = [
+        {"hora": "08:00", "aulas": ["Programação", "Banco de Dados", "Redes"]},
+        {"hora": "10:00", "aulas": ["Sistemas Operacionais", "Engenharia de Software", "Segurança da Informação"]},
+        {"hora": "12:00", "aulas": ["Desenvolvimento Web", "Inteligência Artificial", "Arquitetura de Computadores"]},
+    ]
+
+    context = {
+        "horarios": horarios
+    }
+    return render(request, 'alunos/quadro_horario.html', context)
 
 # Gerencia o processo de logout dos usuários
 def logout_view(request):
@@ -357,6 +392,7 @@ class MeusFeedbacksProfessorView(LoginRequiredMixin, ProfessorRequiredMixin, Lis
                 # otimiza as queries trazendo aluno e user do aluno
                 .select_related('aluno__user')
                 .order_by('-criado_em'))
+
 
 
 

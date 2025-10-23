@@ -41,10 +41,12 @@ urlpatterns = [
     path('dashboard/presenca_alunos/', views.presenca_alunos, name='presenca_alunos'),
 
     #Rota para acessar a página de presença de professores
-    path('dashboard/presenca_professor/', views.presenca_professor, name='presenca_professor'),
-
+    path('dashboard/presenca_professor/', views.presenca_professor_view, name='presenca_professor'),
+    
     #Rota para acessar a página de quadro de horários
     path('dashboard/quadro_horario/', views.quadro_view, name='quadro_view'),
+
+    path('dashboard/cadastrar_turma/', views.cadastrar_turma_view, name='cadastrar_turma_view'),
 
     # Rotas de feedback
     path('aluno/feedbacks/', MeusFeedbacksView.as_view(), name='aluno-meus-feedbacks'),

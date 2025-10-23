@@ -1,0 +1,105 @@
+{% extends 'base_professor.html' %}
+
+{% block title %}Quadro de Horário{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-actions">
+        <div>
+            <h2>Quadro de horário</h2>
+        </div>
+    </div>
+
+    <div class="tabela-container">
+        <table class="tabela-presenca">
+            <thead>
+                <tr>
+                    <th>Horários</th>
+                    <th>Segunda</th>
+                    <th>Terça</th>
+                    <th>Quarta</th>
+                    <th>Quinta</th>
+                    <th>Sexta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bloco in horarios %}
+                    {% for aula in bloco.aulas %}
+                        <tr>
+                            <td>{{ bloco.hora }}</td>
+                            <td>{{ aula }}</td>
+                            <td>{{ aula }}</td>
+                            <td>{{ aula }}</td>
+                            <td>{{ aula }}</td>
+                            <td>{{ aula }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.dashboard-actions {
+    display: flex;
+    width: 100%;
+    justify-content: space-between !important;
+    align-items: center;
+    text-align: center;
+    flex-direction: row !important;
+}
+
+.tabela-container {
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.tabela-presenca {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.tabela-presenca thead th {
+    background-color: #112D4E;
+    color: #FFFFFF;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.tabela-presenca tbody {
+    background-color: #FFFFFF;
+    border: 2px solid #112D4E; 
+    border-radius: 0 0 12px 12px; 
+}
+
+.tabela-presenca tbody td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #112D4E;
+}
+
+.tabela-presenca tbody tr:nth-child(even){
+    background-color: #f0f4f8;
+}
+
+.tabela-presenca tbody tr:hover {
+    background-color: #dbe6f1;
+    transition: 0.2s;
+}
+
+.tabela-presenca tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-presenca tbody td:first-child {
+    font-weight: bold;
+    background-color: rgb(219, 219, 219);
+    border-right: 2px solid #112D4E; /* borda só na direita da primeira coluna */
+}
+</style>
+{% endblock %}
