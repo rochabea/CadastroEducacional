@@ -440,3 +440,44 @@ def presenca_alunos(request):
     except Aluno.DoesNotExist:
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
+    
+
+@login_required
+def perfil_view(request):
+    user = request.user
+
+    contexto = {}
+
+    # Se for aluno
+    if hasattr(user, 'aluno'):
+        aluno = user.aluno
+        disciplinas = aluno.disciplinas.all()
+        avaliacoes = Avaliacao.objects.filter(aluno=aluno)
+        hoje = timezone.now().date()
+        presencas_hoje = Presenca.objects.filter(aluno=aluno, data=hoje)
+        feedbacks = Feedback.objects.filter(aluno=aluno, visivel_para_aluno=True)
+
+        contexto.update({
+            'tipo': 'aluno',
+            'aluno': aluno,
+            'disciplinas': disciplinas,
+            'avaliacoes': avaliacoes,
+            'presencas_hoje': presencas_hoje,
+            'feedbacks': feedbacks
+        })
+
+    # Se for professor
+    elif hasattr(user, 'professor'):
+        professor = user.professor
+        # Todas avaliações que o professor cadastrou
+        avaliacoes = Avaliacao.objects.filter(professor=professor)
+        # Todos alunos que ele tem em alguma disciplina
+        alunos = Aluno.objects.filter(disciplinas__in=Disciplina.objects.filter(alunos__in=[a.id for a in Aluno.objects.all()])).distinct()
+        contexto.update({
+            'tipo': 'professor',
+            'professor': professor,
+            'avaliacoes': avaliacoes,
+            'alunos': alunos
+        })
+
+    return render(request, 'alunos/perfil_view.html', contexto)

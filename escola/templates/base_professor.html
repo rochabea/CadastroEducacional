@@ -28,7 +28,7 @@
 
       {% if user.is_authenticated %}
       <div class="nav-menu">
-        <i href="{% url 'logout' %}" class="fa-solid fa-user iconUser"></i>
+        <a href="{% url 'perfil_view' %}"><i class="fa-solid fa-user iconUser"></i></a>
       </div>
       {% endif %}
     </div>

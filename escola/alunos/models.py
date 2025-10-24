@@ -16,7 +16,7 @@ class Presenca(models.Model):
     presente = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('aluno', 'disciplina', 'data')  # evita duplicidade
+        unique_together = ('aluno', 'disciplina', 'data')
 class Disciplina(models.Model):
     nome = models.CharField(max_length=100)
 
