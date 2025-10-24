@@ -6,9 +6,26 @@ Alunos (usuários comuns) podem acessar suas informações com login e senha.
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+
+class Presenca(models.Model):
+    aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)
+    disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
+    data = models.DateField(default=timezone.now)
+    presente = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('aluno', 'disciplina', 'data')  # evita duplicidade
+class Disciplina(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
 
 # Classe que representa um aluno no sistema
 class Aluno(models.Model):
+    disciplinas = models.ManyToManyField(Disciplina, related_name='alunos', blank=True)
     # Relacionamento com o usuário do sistema
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Número de matrícula único do aluno

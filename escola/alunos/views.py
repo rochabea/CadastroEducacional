@@ -5,11 +5,12 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .models import Avaliacao, Aluno, Professor, Feedback
-from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
+from .models import Avaliacao, Aluno, Disciplina, Presenca, Professor, Feedback
+from .forms import AtribuirAlunosForm, AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
 from fpdf import FPDF
 
 # Página inicial do sistema
@@ -269,8 +270,6 @@ def lista_avaliacoes(request):
 #def feedback_view(request):
 #    return render(request, 'alunos/feedback.html')
 
-def presenca_alunos(request):
-    return render(request, 'alunos/presenca_alunos.html')
 
 def cadastrar_turma_view(request):
     return render(request, 'alunos/cadastrar_turma.html')
@@ -285,31 +284,62 @@ def consulta_avaliacoes(request):
         messages.error(request, 'Aluno não encontrado')
         return render(request, 'error.html', {'message': 'Aluno não encontrado'})
 
-def presenca_professor_view(request):
-    # Dados de exemplo
-    registros = [
-        {"id": 1, "aluno": "João Silva", "disciplina": "POO", "data": "11/10/2025", "presente": True},
-        {"id": 2, "aluno": "Maria Souza", "disciplina": "Processo de Negócios", "data": "10/10/2025", "presente": False},
-        {"id": 3, "aluno": "Carlos Pereira", "disciplina": "Banco de Dados", "data": "09/10/2025", "presente": True},
-        {"id": 4, "aluno": "Ana Costa", "disciplina": "Algoritmos", "data": "12/10/2025", "presente": True},
-        {"id": 5, "aluno": "Rafael Lima", "disciplina": "Engenharia de Software", "data": "08/10/2025", "presente": False},
-        {"id": 6, "aluno": "Fernanda Oliveira", "disciplina": "Redes de Computadores", "data": "07/10/2025", "presente": True},
-    ]
 
-    # Pega disciplina selecionada no filtro (GET)
+@login_required
+def presenca_professor_view(request):
+    hoje = timezone.now().date()
     disciplina_filtro = request.GET.get('disciplina', 'todas')
 
-    # Lista de disciplinas únicas
-    disciplinas_unicas = sorted(set(r['disciplina'] for r in registros))
+    disciplinas = Disciplina.objects.all().order_by('nome')
 
-    # Filtra registros se a disciplina não for "todas"
-    if disciplina_filtro != 'todas':
-        registros = [r for r in registros if r['disciplina'] == disciplina_filtro]
+    if disciplina_filtro == 'todas':
+        alunos = Aluno.objects.prefetch_related('disciplinas').all()
+    else:
+        alunos = Aluno.objects.prefetch_related('disciplinas').filter(disciplinas__nome=disciplina_filtro)
+
+    registros = []
+    faltas_hoje = []
+
+    for aluno in alunos:
+        for disciplina in aluno.disciplinas.all():
+            if disciplina_filtro != 'todas' and disciplina.nome != disciplina_filtro:
+                continue
+
+            # pegar ou criar presença
+            presenca, _ = Presenca.objects.get_or_create(
+                aluno=aluno, disciplina=disciplina, data=hoje
+            )
+
+            # atualizar presença se veio POST
+            if request.method == 'POST':
+                checkbox_name = f'presente_{presenca.id}'
+                presenca.presente = checkbox_name in request.POST
+                presenca.save()
+
+            # montar registro para template
+            registros.append({
+                "id": presenca.id,
+                "aluno": aluno.user.get_full_name(),
+                "disciplina": disciplina.nome,
+                "data": presenca.data,
+                "presente": presenca.presente,
+            })
+
+            if not presenca.presente:
+                faltas_hoje.append({
+                    "aluno": aluno.user.get_full_name(),
+                    "disciplina": disciplina.nome,
+                    "data": hoje
+                })
+
+    if request.method == 'POST':
+        messages.success(request, 'Presenças atualizadas com sucesso!')
 
     return render(request, 'alunos/presenca_professor.html', {
         "registros": registros,
-        "disciplinas": disciplinas_unicas,
+        "disciplinas": disciplinas,
         "disciplina_filtro": disciplina_filtro,
+        "faltas_hoje": faltas_hoje,
     })
 
 def quadro_view(request):
@@ -394,5 +424,19 @@ class MeusFeedbacksProfessorView(LoginRequiredMixin, ProfessorRequiredMixin, Lis
                 .order_by('-criado_em'))
 
 
+@login_required
+def presenca_alunos(request):
+    try:
+        aluno = Aluno.objects.get(user=request.user)
+        hoje = timezone.now().date()
 
+        # Pega todas as presenças do aluno
+        faltas = Presenca.objects.filter(aluno=aluno, presente=False).order_by('-data')
 
+        return render(request, 'alunos/presenca_alunos.html', {
+            'faltas': faltas,
+            'aluno': aluno,
+        })
+    except Aluno.DoesNotExist:
+        messages.error(request, 'Aluno não encontrado')
+        return render(request, 'error.html', {'message': 'Aluno não encontrado'})

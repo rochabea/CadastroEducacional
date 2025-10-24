@@ -1,6 +1,19 @@
 from django.contrib import admin
-from .models import Aluno, Professor,Feedback
+from .models import Aluno, Professor,Feedback, Disciplina
 
+
+# Inline para mostrar os alunos dentro da disciplina
+class AlunoInline(admin.TabularInline):
+    model = Disciplina.alunos.through  # ManyToManyField pelo related_name
+    extra = 1  # número de linhas vazias para adicionar novos alunos
+    verbose_name = "Aluno"
+    verbose_name_plural = "Alunos"
+
+@admin.register(Disciplina)
+class DisciplinaAdmin(admin.ModelAdmin):
+    list_display = ('nome',)
+    search_fields = ('nome',)
+    inlines = [AlunoInline]  # mostra alunos na página da disciplina
 @admin.register(Aluno)
 class AlunoAdmin(admin.ModelAdmin):
     # busca pelo usuário vinculado e pela matrícula
@@ -12,6 +25,7 @@ class AlunoAdmin(admin.ModelAdmin):
         'matricula',
     )
     list_display = ('id', 'user', 'matricula')
+    filter_horizontal = ('disciplinas',)
 
 @admin.register(Professor)
 class ProfessorAdmin(admin.ModelAdmin):
@@ -47,3 +61,4 @@ class FeedbackAdmin(admin.ModelAdmin):
     autocomplete_fields = ('aluno', 'professor')
     # define a ordem padrão dos feedbacks pela data de criação (mais recentes primeiro)
     ordering = ('-criado_em',)
+

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Minhas Faltas{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Faltas de {{ aluno.user.get_full_name }}</h2>
+
+    {% if faltas %}
+        <table class="tabela-presenca">
+            <thead>
+                <tr>
+                    <th>Disciplina</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for falta in faltas %}
+                <tr>
+                    <td>{{ falta.disciplina.nome }}</td>
+                    <td>{{ falta.data }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Você não possui faltas registradas.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .models import Avaliacao, Aluno, Professor
+from .models import Avaliacao, Aluno, Professor, Disciplina
 from django.contrib.auth.models import User
 
 # Formulário para cadastro de usuários (alunos e professores)
@@ -33,6 +33,17 @@ class ProfessorForm(forms.ModelForm):
     class Meta:
         model = Professor
         fields = []
+
+class AtribuirAlunosForm(forms.Form):
+    disciplina = forms.ModelChoiceField(
+        queryset=Disciplina.objects.all(),
+        label="Selecione a disciplina"
+    )
+    alunos = forms.ModelMultipleChoiceField(
+        queryset=Aluno.objects.select_related("user").all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Selecione os alunos"
+    )
 
 # Formulário para lançamento de avaliações
 class AvaliacaoForm(forms.ModelForm):

@@ -7,24 +7,20 @@
     <div class="dashboard-actions">
         <div>
             <h2>Presença e Faltas</h2>
-            <a href="{% url 'cadastrar_turma_view' %}">
-                <button>Cadastrar nova turma</button>
-            </a>        
+            <form method="get" style="display:flex; align-items:center; gap:10px;">
+                <label for="disciplina">Filtrar por disciplina:</label>
+                <select name="disciplina" id="disciplina">
+                    <option value="todas" {% if disciplina_filtro == 'todas' %}selected{% endif %}>Todas</option>
+                    {% for d in disciplinas %}
+                        <option value="{{ d.nome }}" {% if disciplina_filtro == d.nome %}selected{% endif %}>{{ d.nome }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn">Filtrar</button>
+            </form>
         </div>
     </div>
-
-    <form method="get" action="{% url 'presenca_professor' %}" style="margin-bottom: 15px;">
-        <label for="disciplina">Filtrar por disciplina:</label>
-        <select name="disciplina" id="disciplina" onchange="this.form.submit()">
-            <option value="todas" {% if disciplina_filtro == 'todas' %}selected{% endif %}>Todas</option>
-            {% for d in disciplinas %}
-                <option value="{{ d }}" {% if disciplina_filtro == d %}selected{% endif %}>{{ d }}</option>
-            {% endfor %}
-        </select>
-    </form>
-
-    <!-- Tabela de presença -->
-    <div class="tabela-container">
+    <form method="post" action="{% url 'presenca_professor' %}">
+        {% csrf_token %}
         <table class="tabela-presenca">
             <thead>
                 <tr>
@@ -40,7 +36,9 @@
                     <td>{{ registro.aluno }}</td>
                     <td>{{ registro.disciplina }}</td>
                     <td>{{ registro.data }}</td>
-                    <td><input type="checkbox" {% if registro.presente %}checked{% endif %}></td>
+                    <td>
+                        <input type="checkbox" name="presente_{{ registro.id }}" {% if registro.presente %}checked{% endif %}>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -49,6 +47,22 @@
                 {% endfor %}
             </tbody>
         </table>
+        <button type="submit" class="btn">Salvar Presenças</button>
+    </form>
+        {% if faltas_hoje %}
+        <div class="dashboard-container">
+            <div>
+                <h3>Faltas registradas:</h3>
+                <ul>
+                    {% for falta in faltas_hoje %}
+                        <li>{{ falta.aluno }} - {{ falta.disciplina }} ({{ falta.data }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}    
+
+        
     </div>
 </div>
 
@@ -136,6 +150,7 @@
 .tabela-presenca tbody tr:nth-child(even){
     background-color: #f0f4f8;
 }
+
 
 </style>
 {% endblock %}
