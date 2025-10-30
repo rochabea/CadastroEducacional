@@ -8,6 +8,28 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+class Horario(models.Model):
+    hora = models.TimeField()
+
+    def __str__(self):
+        return self.hora.strftime("%H:%M")
+
+
+class Aula(models.Model):
+    DIAS_SEMANA = [
+        ("segunda", "Segunda"),
+        ("terca", "Terça"),
+        ("quarta", "Quarta"),
+        ("quinta", "Quinta"),
+        ("sexta", "Sexta"),
+    ]
+
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE, related_name="aulas")
+    dia = models.CharField(max_length=10, choices=DIAS_SEMANA)
+    disciplina = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.get_dia_display()} - {self.disciplina}"
 
 class Presenca(models.Model):
     aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE)

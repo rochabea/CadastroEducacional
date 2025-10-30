@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .models import Avaliacao, Aluno, Disciplina, Presenca, Professor, Feedback
+from .models import Avaliacao, Aluno, Disciplina, Presenca, Professor, Feedback, Horario
 from .forms import AtribuirAlunosForm, AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
 from fpdf import FPDF
 
@@ -343,17 +343,22 @@ def presenca_professor_view(request):
     })
 
 def quadro_view(request):
-    # Horários fixos com 3 fileiras cada e matérias de T.I.
-    horarios = [
-        {"hora": "08:00", "aulas": ["Programação", "Banco de Dados", "Redes"]},
-        {"hora": "10:00", "aulas": ["Sistemas Operacionais", "Engenharia de Software", "Segurança da Informação"]},
-        {"hora": "12:00", "aulas": ["Desenvolvimento Web", "Inteligência Artificial", "Arquitetura de Computadores"]},
-    ]
+    horarios = Horario.objects.prefetch_related("aulas").all()
+    dias = ["segunda", "terca", "quarta", "quinta", "sexta"]
 
-    context = {
-        "horarios": horarios
-    }
-    return render(request, 'alunos/quadro_horario.html', context)
+    return render(request, 'alunos/quadro_horario.html', {
+        "horarios": horarios,
+        "dias": dias
+    })
+
+def quadro_aluno_view(request):
+    horarios = Horario.objects.prefetch_related("aulas").all()
+    dias = ["segunda", "terca", "quarta", "quinta", "sexta"]
+
+    return render(request, 'alunos/quadro_horario_aluno.html', {
+        "horarios": horarios,
+        "dias": dias
+    })
 
 # Gerencia o processo de logout dos usuários
 def logout_view(request):

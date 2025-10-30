@@ -46,6 +46,8 @@ urlpatterns = [
     #Rota para acessar a página de quadro de horários
     path('dashboard/quadro_horario/', views.quadro_view, name='quadro_view'),
 
+    path('dashboard/quadro_horario_aluno/', views.quadro_aluno_view, name='quadro_aluno_view'),
+
     path('dashboard/cadastrar_turma/', views.cadastrar_turma_view, name='cadastrar_turma_view'),
 
     # Rotas de feedback

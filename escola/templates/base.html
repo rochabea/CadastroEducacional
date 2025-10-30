@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-{% if request.path != '/login/' and request.path != '/logout/' and request.path != '' %}
+
 <header class="menuSuperior">
   <nav class="navbar">
     <div class="nav-container">
@@ -41,7 +41,7 @@
       {% if user.is_authenticated %}
       <div class="nav-menu">
         <a href="{% url 'dashboard_aluno'%}"><i class="fa-solid fa-house iconUser"></i></a>
-        <a href="{% url 'quadro_view'%}"><i class="fa-solid fa-calendar-days iconUser"></i></a>
+        <a href="{% url 'quadro_aluno_view'%}"><i class="fa-solid fa-calendar-days iconUser"></i></a>
         <a href="{% url 'aluno-meus-feedbacks' %}"><i class="fa-solid fa-comments iconUser"></i></a>
         <a href="{% url 'presenca_alunos' %}"><i class="fa-solid fa-graduation-cap iconUser"></i></a>
       </div>
@@ -49,7 +49,7 @@
     </div>
   </nav>
 </aside>
-    {% endif %}
+
     <main>
         {% block content %}{% endblock %}
     </main>

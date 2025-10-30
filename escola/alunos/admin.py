@@ -1,6 +1,18 @@
 from django.contrib import admin
-from .models import Aluno, Professor,Feedback, Disciplina
+from .models import Aluno, Professor,Feedback, Disciplina,Horario,Aula
+class AulaInline(admin.TabularInline):
+    model = Aula
+    extra = 1
 
+@admin.register(Horario)
+class HorarioAdmin(admin.ModelAdmin):
+    list_display = ("hora",)
+    inlines = [AulaInline]
+
+@admin.register(Aula)
+class AulaAdmin(admin.ModelAdmin):
+    list_display = ("disciplina", "dia", "horario")
+    list_filter = ("dia", "horario")
 
 # Inline para mostrar os alunos dentro da disciplina
 class AlunoInline(admin.TabularInline):
