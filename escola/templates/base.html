@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    {% if not request.path == '/login/' %}
+{% if request.path != '/login/' and request.path != '/logout/' and request.path != '' %}
 <header class="menuSuperior">
   <nav class="navbar">
     <div class="nav-container">

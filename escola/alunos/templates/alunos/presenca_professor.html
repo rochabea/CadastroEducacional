@@ -4,63 +4,76 @@
 
 {% block content %}
 <div class="dashboard-container">
-    <div class="dashboard-actions">
-        <div>
-            <h2>Presença e Faltas</h2>
-            <form method="get" style="display:flex; align-items:center; gap:10px;">
-                <label for="disciplina">Filtrar por disciplina:</label>
-                <select name="disciplina" id="disciplina">
-                    <option value="todas" {% if disciplina_filtro == 'todas' %}selected{% endif %}>Todas</option>
-                    {% for d in disciplinas %}
-                        <option value="{{ d.nome }}" {% if disciplina_filtro == d.nome %}selected{% endif %}>{{ d.nome }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="btn">Filtrar</button>
-            </form>
-        </div>
-    </div>
-    <form method="post" action="{% url 'presenca_professor' %}">
-        {% csrf_token %}
-        <table class="tabela-presenca">
-            <thead>
-                <tr>
-                    <th>Aluno</th>
-                    <th>Disciplina</th>
-                    <th>Data</th>
-                    <th>Presente</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for registro in registros %}
-                <tr>
-                    <td>{{ registro.aluno }}</td>
-                    <td>{{ registro.disciplina }}</td>
-                    <td>{{ registro.data }}</td>
-                    <td>
-                        <input type="checkbox" name="presente_{{ registro.id }}" {% if registro.presente %}checked{% endif %}>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4" style="text-align:center;">Nenhum registro encontrado</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <button type="submit" class="btn">Salvar Presenças</button>
-    </form>
-        {% if faltas_hoje %}
-        <div class="dashboard-container">
+        <div class="dashboard-actions">
             <div>
-                <h3>Faltas registradas:</h3>
-                <ul>
-                    {% for falta in faltas_hoje %}
-                        <li>{{ falta.aluno }} - {{ falta.disciplina }} ({{ falta.data }})</li>
-                    {% endfor %}
-                </ul>
+                <h2>Presença e Faltas</h2>
             </div>
         </div>
-        {% endif %}    
+
+        {% csrf_token %}
+        <div class="headerTabela">
+            <h2>Hoje:</h2>
+            <article>
+                <form method="get">
+                    <label for="disciplina">Filtrar por disciplina:</label>
+                    <div class="aux">
+                        <select name="disciplina" id="disciplina">
+                            <option value="todas" {% if disciplina_filtro == 'todas' %}selected{% endif %}>Todas</option>
+                            {% for d in disciplinas %}
+                                <option value="{{ d.nome }}" {% if disciplina_filtro == d.nome %}selected{% endif %}>{{ d.nome }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn">Filtrar</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+        <form method="post" action="{% url 'presenca_professor' %}">
+            <table class="tabela-presenca">
+                <thead>
+                    <tr>
+                        <th>Aluno</th>
+                        <th>Disciplina</th>
+                        <th>Data</th>
+                        <th>Presente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros %}
+                    <tr>
+                        <td>{{ registro.aluno }}</td>
+                        <td>{{ registro.disciplina }}</td>
+                        <td>{{ registro.data }}</td>
+                        <td>
+                            <input type="checkbox" name="presente_{{ registro.id }}" {% if registro.presente %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align:center;">Nenhum registro encontrado</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="footerTabela">
+                <button type="submit" class="btnSalvar">Salvar Presenças</button>
+            </div>
+        </form>
+        {% if faltas_hoje %}
+        <div class="faltas-container">
+            <h3>Faltas registradas:</h3>
+            <ul class="faltas-lista">
+                {% for falta in faltas_hoje %}
+                    <li class="falta-item">
+                        <span class="falta-aluno">{{ falta.aluno }}</span>
+                        <span class="falta-disciplina">{{ falta.disciplina }}</span>
+                        <span class="falta-data">({{ falta.data }})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}  
 
         
     </div>
@@ -80,7 +93,7 @@
     display: flex;
     width: 100%;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
@@ -89,6 +102,29 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+}
+
+form{
+    width: 100%;
+    max-width: none !important;
+}
+
+.headerTabela{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+
+
+    .aux{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+}
+
+.btnSalvar{
+    max-width: 200px;
 }
 
 .tabela-presenca th, .tabela-presenca td {
@@ -149,6 +185,70 @@
 
 .tabela-presenca tbody tr:nth-child(even){
     background-color: #f0f4f8;
+}
+
+.footerTabela{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.faltas-container {
+    margin-top: 30px;
+
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.faltas-container h3 {
+    margin-bottom: 15px;
+    color: #112D4E;
+    text-align: center;
+    font-weight: 600;
+}
+
+.faltas-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.falta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4f8;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #dbe6f1;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.falta-item:hover {
+    background-color: #dbe6f1;
+    transform: scale(1.005);
+}
+
+.falta-aluno {
+    font-weight: 600;
+    color: #112D4E;
+    flex: 1;
+}
+
+.falta-disciplina {
+    flex: 1;
+    text-align: center;
+    color: #3f72af;
+}
+
+.falta-data {
+    flex: 1;
+    text-align: right;
+    color: #666;
+    font-size: 0.9em;
 }
 
 

@@ -1,44 +1,43 @@
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
 
-<head>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<div class="form-container"> 
-    
-    <div class="logoSis">
-            <div class="form-links">
-            {% load static %}
-            <img src="{% static 'image/Imagem1.png' %}"  alt="">
-            <div class="footerBtns">
-                <a href="{% url 'cadastro_aluno' %}" class="btn-secondary">Cadastrar como Aluno</a>
-                <a href="{% url 'cadastro_professor' %}" class="btn-secondary">Cadastrar como Professor</a>
+<section class="sectionLogin">
+    <div class="login-page">
+        <div class="form-container"> 
+            <div class="logoSis">
+                <div class="form-links">
+                    <img src="{% static 'image/Imagem1.png' %}" alt="">
+                    <div class="footerBtns">
+                        <a href="{% url 'cadastro_aluno' %}" class="btn-secondary">Cadastrar como Aluno</a>
+                        <a href="{% url 'cadastro_professor' %}" class="btn-secondary">Cadastrar como Professor</a>
+                    </div>
+                    <p class="labelConta">Não tem uma conta? Crie agora</p>
+                </div>
             </div>
-            <p class="labelConta">Não tem uma conta? Crie agora</p>
+
+            <div class="formLogin2">
+                <h2>Login</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Usuário:</label>
+                        <input type="text" name="username" id="username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" name="password" id="password" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Entrar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="formLogin2">
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="username">Usuário:</label>
-                <input type="text" name="username" id="username" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Senha:</label>
-                <input type="password" name="password" id="password" required>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">Entrar</button>
-            </div>
-        </form>
-   
-    </div>
-</div>
-{% endblock %} 
+{% endblock %}

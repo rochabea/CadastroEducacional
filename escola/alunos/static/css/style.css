@@ -31,6 +31,52 @@ body {
   }
 }
 
+
+.sectionLogin {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;       
+  overflow: hidden;
+}
+
+.sectionLogin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../image/teste.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;   
+  filter: blur(2px);
+  transform: scale(1.05); 
+  z-index: -1;
+}
+
+.login-page {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+
+.login-page .form-container {
+    position: relative;
+    z-index: 1;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
 .menuSuperior .navbar {
   height: 100%;
 }
