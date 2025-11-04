@@ -4,9 +4,7 @@ Bem-vindo ao **Breach System**, um sistema acadêmico inspirado em um AVA (Ambie
 O sistema oferece funcionalidades para **alunos**, **professores** e **administradores**, permitindo gestão acadêmica completa e interação entre usuários.
 
 # 📚 Imagens do Sistema
-<div style="text-align:center">
 <img width="1055" height="526" alt="{F7D9ADD3-D233-4187-B600-63810DD6067A}" src="https://github.com/user-attachments/assets/f416e2f8-6d18-467c-a446-2b4ca3941f90" />
-</div>
 <img width="1056" height="528" alt="{BA6996E6-7008-4274-AC1E-AE5E2FEB679D}" src="https://github.com/user-attachments/assets/e30ca568-008c-4843-b561-f0aee8cc94ee" />
 <img width="1058" height="527" alt="{26DA6E72-68C9-48C1-B07A-E3AF7A274195}" src="https://github.com/user-attachments/assets/1f83213d-ef20-410a-b1b2-8f18ed3a5ecd" />
 <img width="1055" height="526" alt="{DF120FA1-DD9F-45EC-A399-70C43A850D1F}" src="https://github.com/user-attachments/assets/11a7d41c-87bd-4a20-b5cd-6c8128103144" />
