@@ -1,4 +1,4 @@
-# 📖 Sistema Breach TESTE
+# 📖 Sistema Breach
 
 Bem-vindo ao **Breach System**, um sistema acadêmico inspirado em um AVA (Ambiente Virtual de Aprendizagem), desenvolvido em **Python + Django**.  
 O sistema oferece funcionalidades para **alunos**, **professores** e **administradores**, permitindo gestão acadêmica completa e interação entre usuários.
