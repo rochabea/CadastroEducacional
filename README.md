@@ -116,3 +116,5 @@ https://github.com/rochabea/CadastroEducacional/issues
 
 Beatriz Rocha de Araújo, Lucas Tesche, João Victor de Jesus Alves, Ana Alice Martins e Matheus Dias Coelho
 
+# Documentação Online:
+https://docs.google.com/document/d/1yIr4DCFEIjcXDgJZFIh3NAHsMw7EEc8riYf-x9j8Oj0/edit?usp=sharing
