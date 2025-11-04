@@ -1,10 +1,10 @@
-<img width="1914" height="847" alt="image" src="https://github.com/user-attachments/assets/d28b1388-19cc-4812-9f04-fae270edbff6" /># 📚 Sistema Breach
+# 📖 Sistema Breach
 
 Bem-vindo ao **Breach System**, um sistema acadêmico inspirado em um AVA (Ambiente Virtual de Aprendizagem), desenvolvido em **Python + Django**.  
 O sistema oferece funcionalidades para **alunos**, **professores** e **administradores**, permitindo gestão acadêmica completa e interação entre usuários.
 
 # 📚 Imagens do Sistema
-
+<img width="527" height="288" alt="Group 7" src="https://github.com/user-attachments/assets/338e1ee1-1de5-4b33-81a3-f991b8354640" />
 <img width="1055" height="526" alt="{F7D9ADD3-D233-4187-B600-63810DD6067A}" src="https://github.com/user-attachments/assets/f416e2f8-6d18-467c-a446-2b4ca3941f90" />
 <img width="1056" height="528" alt="{BA6996E6-7008-4274-AC1E-AE5E2FEB679D}" src="https://github.com/user-attachments/assets/e30ca568-008c-4843-b561-f0aee8cc94ee" />
 <img width="1058" height="527" alt="{26DA6E72-68C9-48C1-B07A-E3AF7A274195}" src="https://github.com/user-attachments/assets/1f83213d-ef20-410a-b1b2-8f18ed3a5ecd" />
