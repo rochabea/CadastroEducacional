@@ -1,76 +1,118 @@
-# CadastroEducacional
+# 📚 Sistema de Cadastro Educacional – AVA
 
-Sistema de Gestão Educacional para registro de notas e presença de alunos.
+Bem-vindo ao **Cadastro Educacional**, um sistema acadêmico inspirado em um AVA (Ambiente Virtual de Aprendizagem), desenvolvido em **Python + Django**.  
+O sistema oferece funcionalidades para **alunos**, **professores** e **administradores**, permitindo gestão acadêmica completa e interação entre usuários.
 
-## 📋 Descrição
+---
 
-O CadastroEducacional é um sistema desenvolvido para facilitar o gerenciamento acadêmico, permitindo o registro e acompanhamento de notas e presença dos alunos de forma eficiente e organizada.
+## 🚀 Funcionalidades
 
-## ✨ Funcionalidades
+### 👨‍🎓 Área do Aluno
+O aluno pode:
 
-- Cadastro de alunos
-- Registro de notas por disciplina
-- Controle de presença
-- Interface intuitiva e fácil de usar
+- 📊 **Dashboard acadêmico** — Visualização de notas e desempenho
+- 📝 **Feedbacks do professor**
+- 📅 **Presença nas disciplinas**
+- 🕐 **Quadro de horários**
+- 🙋‍♂️ **Informações pessoais** — consulta de dados pessoais
 
-## 🔧 Tecnologias Utilizadas
+---
 
-- Backend: Python com Django
-- Frontend: HTML, CSS, JavaScript
-- Banco de Dados: SQLite3
-- Framework Web: Django
-- Template Engine: Django Templates
+### 👨‍🏫 Área do Professor
+O professor possui todas as funcionalidades dos alunos **+**:
 
-## ✅ Testes
+- ➕ **Lançamento de avaliações**
+- ✏️ **Edição e exclusão de avaliações**
+- 📉 **Cadastro de faltas**
+- 💬 **Envio de feedbacks**
+- 📊 Dashboard com controle administrativo sobre turmas e notas
 
-Este projeto possui testes automatizados que validam funcionalidades importantes como:
-- Teste unitário;
-- Teste ponta a ponta;
-- Teste de integração de sistema;
-- Teste de integração de unidades;
-- Teste de carga;
-- Teste de stress;
-- Teste de aceite;
-- Teste de interface do usuário;
+---
+
+### 🛠️ Área Administrativa (ADMIN)
+Responsável por:
+
+- 📘 Cadastro de disciplinas
+- 🏫 Criação e gerenciamento de turmas
+- 🕒 Configuração do quadro de horários
+- 👥 Administração de usuários e permissões
+
+Acesso ao painel administrativo Django:
+```
+/ admin
+```
+
+Credenciais padrão:
+
+| Usuário | Senha |
+|--------|--------|
+| admin | admin |
+
+> ⚠️ **Altere essas credenciais ao usar em produção.**
+
+---
+
+## 🧠 Tecnologias Utilizadas
+
+| Tecnologia | Função |
+|-----------|--------|
+| **Python** | Linguagem principal |
+| **Django** | Framework web |
+| **SQLite / PostgreSQL** | Banco de dados |
+| **HTML / CSS / JS** | Interface |
+
+---
+
+## 📂 Estrutura do Projeto (Simplificada)
+
+CadastroEducacional/
+│
+├── app/ # Apps do Django
+├── templates/ # Arquivos HTML
+├── static/ # CSS, JS e imagens
+├── manage.py
+└── settings/ # Configurações do projeto
 
 
-## ⚙️ Requisitos
+---
 
-- Python 3.x
-- Django
-- pip (gerenciador de pacotes Python)
+## ▶️ Como Rodar o Projeto
 
-## 📦 Instalação
+### ✅ Pré-requisitos
+- Python 3.9+
+- Pip
+- Virtualenv (opcional, recomendado)
 
-1. Clone o repositório:
+### ⚙️ Instalação
+
 ```bash
 git clone https://github.com/rochabea/CadastroEducacional.git
-```
+cd CadastroEducacional
 
-2. Instale as dependências:
-```bash
 pip install -r requirements.txt
-```
 
-3. Execute as migrações do banco de dados:
-```bash
 python manage.py migrate
-```
 
-4. Inicie o servidor de desenvolvimento:
-```bash
 python manage.py runserver
 ```
+Acesse:
 
-## 🎯 Como Usar
+```
+http://127.0.0.1:8000
+```
+Painel admin:
+```
+http://127.0.0.1:8000/admin
+```
 
-1. Acesse o sistema através do navegador
-2. Faça login com suas credenciais
-3. Navegue pelo menu para acessar as diferentes funcionalidades
-4. Realize o cadastro de alunos, notas e presença conforme necessário
+🤝 Contribuindo
 
+Contribuições são bem-vindas!
 
-## ⚠️ Observação
+Abra uma issue ou envie um PR:
+https://github.com/rochabea/CadastroEducacional/issues
 
-- Este projeto requer o **Python 3.8+** e o **Django** instalados para funcionar corretamente.  
-- O banco de dados utilizado é o **SQLite**, que já vem integrado com o Django por padrão.
+#👨‍🎓 Criadores:
+
+Beatriz Rocha de Araújo, Lucas Tesche, João Victor de Jesus Alves, Ana Alice Martins e Matheus Dias Coelho
+
