@@ -9,8 +9,13 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
+<<<<<<< HEAD
 from .models import Avaliacao, Aluno, Disciplina, Presenca, Professor, Feedback, Horario
 from .forms import AtribuirAlunosForm, AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
+=======
+from .models import Avaliacao, Aluno, Professor
+from .forms import AvaliacaoForm, UserForm, AlunoForm, ProfessorForm
+>>>>>>> 63ce42e234d66c938219ed3b899adda601aa622b
 from fpdf import FPDF
 
 # Página inicial do sistema
@@ -125,8 +130,11 @@ def gerar_os(request):
     response = HttpResponse(pdf.output(dest='S').encode('latin-1'), content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="notas.pdf"'
     return response
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 63ce42e234d66c938219ed3b899adda601aa622b
 
 def calcular_media(nota1, nota2):
     if nota1 is not None and nota2 is not None:

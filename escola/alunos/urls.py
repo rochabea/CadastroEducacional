@@ -32,6 +32,7 @@ urlpatterns = [
     path('avaliacoes/consulta/', views.consulta_avaliacoes, name='consulta_avaliacoes'),
 
     #Rota para exportar o pdf
+<<<<<<< HEAD
     path('exportar-pdf/', views.gerar_os, name="exportar_pdf"),
 
     #Rota para acessar a página de feedback
@@ -58,4 +59,8 @@ urlpatterns = [
     path('dashboard/perfil_view', views.perfil_view, name='perfil_view'),
 
     
+=======
+    path('exportar-pdf/', views.gerar_os, name="exportar_pdf")
+
+>>>>>>> 63ce42e234d66c938219ed3b899adda601aa622b
 ]
