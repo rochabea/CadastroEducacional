@@ -48,6 +48,8 @@ Responsável por:
 - 🕒 Configuração do quadro de horários
 - 👥 Administração de usuários e permissões
 
+---
+
 ### 🤖 Testes
 
 - Testes Funcionais (Testes unitários)
