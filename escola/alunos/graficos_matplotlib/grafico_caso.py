@@ -2,14 +2,11 @@ import matplotlib.pyplot as plt
 
 # Mapeamento de cores por tipo de teste
 cores = {
-    "Integração de Unidades": "#4e79a7",
-    "Carga": "#f28e2b",
-    "Stress": "#e15759",
-    "Aceitação": "#76b7b2",
-    "Componente": "#59a14f",
-    "Integração de Sistema": "#edc948",
-    "Interface de Usuário": "#b07aa1",
-    "End-to-End": "#ff9da7"
+    "Unitarios": "#4e79a7",
+    "CRUD": "#f28e2b",
+    "Carga": "#e15759",
+    "RN": "#76b7b2",
+    "Stress": "#59a14f",
 }
 
 # Dados

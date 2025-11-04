@@ -2,40 +2,35 @@ import matplotlib.pyplot as plt
 
 # Tipos de testes (categorias)
 tipos_de_testes = [
-    "Integração de Unidades",
+    "Unitarios",
+    "CRUD",
+    "RN",
     "Carga",
     "Stress",
-    "Aceitação",
-    "Componente",
-    "Integração de Sistema",
-    "Interface de Usuário",
-    "End-to-End"
 ]
 
 # Casos de teste CT01 a CT10 e os tipos de testes em que apareceram
 casos_por_teste = {
-    "CT01": ["Integração de Unidades", "Aceitação", "Componente", "Integração de Sistema", "Interface de Usuário", "End-to-End"],
-    "CT02": ["Integração de Unidades", "Aceitação", "Componente", "Integração de Sistema", "Interface de Usuário", "End-to-End"],
-    "CT03": ["Integração de Unidades", "Aceitação", "Componente", "Integração de Sistema", "Interface de Usuário", "End-to-End"],
-    "CT04": ["Integração de Unidades", "Aceitação", "Componente", "Interface de Usuário", "End-to-End"],
-    "CT05": ["Integração de Unidades", "Aceitação", "Componente", "Interface de Usuário", "End-to-End"],
-    "CT06": ["Integração de Unidades", "Carga", "Componente", "Integração de Sistema", "Interface de Usuário", "End-to-End"],
-    "CT07": ["Integração de Unidades", "End-to-End"],
-    "CT08": ["Integração de Unidades", "End-to-End"],
-    "CT09": ["Carga", "Stress", "Integração de Sistema", "Interface de Usuário"],
-    "CT10": ["Stress"]
+    "CT01": ["Unitarios", "RN"],
+    "CT02": ["Unitarios"],
+    "CT03": ["Unitarios", "RN"],
+    "CT04": ["Unitarios", "RN"],
+    "CT05": ["Unitarios", "Carga", "Stress"],
+    "CT06": ["Carga", "Stress"],
+    "CT07": ["Carga", "Stress"],
+    "CT08": ["Carga", "Stress"],
+    "CT09": ["Carga", "Stress"],
+    "CT10": ["Carga", "Stress"],
+    "CT11": ["CRUD"]
 }
 
 # Mapeamento de cores por tipo de teste
 cores = {
-    "Integração de Unidades": "#4e79a7",
-    "Carga": "#f28e2b",
-    "Stress": "#e15759",
-    "Aceitação": "#76b7b2",
-    "Componente": "#59a14f",
-    "Integração de Sistema": "#edc948",
-    "Interface de Usuário": "#b07aa1",
-    "End-to-End": "#ff9da7"
+    "Unitarios": "#4e79a7",
+    "CRUD": "#f28e2b",
+    "Carga": "#e15759",
+    "RN": "#76b7b2",
+    "Stress": "#59a14f",
 }
 
 # Organizar dados para o gráfico
