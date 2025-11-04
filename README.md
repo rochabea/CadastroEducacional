@@ -54,6 +54,7 @@ Responsável por:
 
 - Testes Funcionais (Testes unitários)
 - Testes de Integração (Testes de Rotas)
+- Testes de Desempenho (Testes de pressão)
 - Usabilidade (Testes de Interface)
 
 ---
