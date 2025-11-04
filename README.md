@@ -48,6 +48,14 @@ Responsável por:
 - 🕒 Configuração do quadro de horários
 - 👥 Administração de usuários e permissões
 
+### 🤖 Testes
+
+- Testes Funcionais (Testes unitários)
+- Testes de Integração (Testes de Rotas)
+- Usabilidade (Testes de Interface)
+
+---
+
 Acesso ao painel administrativo Django:
 ```
 / admin
