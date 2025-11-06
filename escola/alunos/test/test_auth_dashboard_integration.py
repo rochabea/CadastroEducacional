@@ -92,7 +92,7 @@ def test_CT07_acesso_dashboard_aluno_autenticado(client, user_aluno):
 # Testes — Professor
 
 @pytest.mark.django_db
-def test_CT08_realizar_login_prof_redireciona_para_dashboard_professor(client, user_professor):
+def test_CT12_realizar_login_prof_redireciona_para_dashboard_professor(client, user_professor):
     """Login de professor deve redirecionar para dashboard do professor."""
     # GET exibe login
     get_resp = client.get(reverse(URL_LOGIN))
@@ -110,7 +110,7 @@ def test_CT08_realizar_login_prof_redireciona_para_dashboard_professor(client, u
     assert "/dashboard/professor" in location or reverse(URL_DASHBOARD_PROF) in location
 
 @pytest.mark.django_db
-def test_CT09_acesso_dashboard_prof_autenticado(client, user_professor):
+def test_CT13_acesso_dashboard_prof_autenticado(client, user_professor):
     """Sessão autenticada de professor acessa dashboard rapidamente e recebe 200."""
     assert client.login(username="prof01", password="SenhaForte123!")
     with Stopwatch() as sw:
@@ -120,7 +120,7 @@ def test_CT09_acesso_dashboard_prof_autenticado(client, user_professor):
     assert resp.content, "Resposta do dashboard do professor veio vazia."
 
 @pytest.mark.django_db
-def test_CT10_dashboard_professor_sem_login_redireciona(client):
+def test_CT14_bloqueio_acesso_desautorizado(client):
     """Acesso ao dashboard do professor sem autenticação deve redirecionar para login (middleware de auth)."""
     resp = client.get(reverse(URL_DASHBOARD_PROF))
     # por padrão, @login_required redireciona (302) para LOGIN_URL com ?next=...
