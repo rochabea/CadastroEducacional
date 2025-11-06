@@ -2,6 +2,24 @@
 import pytest
 from django.contrib.auth import get_user_model
 from model_bakery import baker
+import sys, types
+
+# --- STUB PARA 'fpdf' EM AMBIENTE DE TESTE (não altera o app) 
+if "fpdf" not in sys.modules:
+    fake_fpdf = types.ModuleType("fpdf")
+
+    class FPDF:
+        def __init__(self, *args, **kwargs): pass
+        def add_page(self): pass
+        def set_font(self, *args, **kwargs): pass
+        def cell(self, *args, **kwargs): pass
+        def ln(self, *args, **kwargs): pass
+        # fpdf2 retorna str no output(dest='S'); seu código chama .encode('latin-1')
+        def output(self, dest=None):
+            return "PDF"  # string -> .encode(...) funciona
+
+    fake_fpdf.FPDF = FPDF
+    sys.modules["fpdf"] = fake_fpdf
 
 @pytest.fixture
 def user_staff(db):
@@ -66,3 +84,4 @@ def avaliacao_factory(db, aluno, professor):
         return objs
 
     return _factory
+
