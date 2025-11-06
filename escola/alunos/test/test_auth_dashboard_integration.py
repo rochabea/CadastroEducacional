@@ -1,4 +1,3 @@
-# alunos/test/test_auth_dashboard_integration.py
 import time
 import pytest
 from django.urls import reverse
@@ -14,10 +13,7 @@ class Stopwatch:
     def __exit__(self, exc_type, exc, tb):
         self.elapsed = time.perf_counter() - self._t0
 
-
-# ---------------------------
 # Fixtures
-# ---------------------------
 
 @pytest.fixture
 def user_aluno(db):
@@ -43,14 +39,11 @@ def user_professor(db):
         last_name="Teste",
         email="prof.teste@example.com",
     )
-    # vincula o User a um Professor (seu dashboard_professor exige Professor.objects.get(user=request.user))
+    # vincula o User a um Professor (dashboard_professor exige Professor.objects.get(user=request.user))
     Professor.objects.create(user=u)
     return u
 
-
-# ---------------------------
 # Testes — Aluno
-# ---------------------------
 
 @pytest.mark.django_db
 def test_CT05_acesso_pagina_login_get(client):
@@ -67,14 +60,14 @@ def test_CT06_realizar_login_aluno_redireciona_para_dashboard_aluno(client, user
     from alunos.models import Aluno
     from django.urls import reverse
 
-    # garante o papel correto para o fluxo da sua view
+    # garante o papel correto para o fluxo da view
     Aluno.objects.get_or_create(user=user_aluno)
 
     # GET exibe a página de login
     get_resp = client.get(reverse(URL_LOGIN))
     assert get_resp.status_code == 200
 
-    # POST realiza o login (sem follow pra inspecionar Location do 302)
+    # POST realiza o login (follow pra inspecionar Location do 302)
     post_resp = client.post(reverse(URL_LOGIN), {
         "username": "tio123",
         "password": "SenhaForte123!",
@@ -96,10 +89,7 @@ def test_CT07_acesso_dashboard_aluno_autenticado(client, user_aluno):
     assert sw.elapsed < 2.0, f"Dashboard (aluno) demorou {sw.elapsed:.2f}s (limite < 2s)"
     assert resp.content, "Resposta do dashboard do aluno veio vazia."
 
-
-# ---------------------------
 # Testes — Professor
-# ---------------------------
 
 @pytest.mark.django_db
 def test_CT08_realizar_login_prof_redireciona_para_dashboard_professor(client, user_professor):
