@@ -1,0 +1,86 @@
+{% extends 'base_professor.html' %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="perfil-container">
+
+    {% if tipo == 'aluno' %}
+        <div class="card">
+            <h2>Aluno {{ aluno.user.get_full_name }}</h2>
+            <p><strong>Matrícula:</strong> {{ aluno.matricula }}</p>
+            <p><strong>Email:</strong> {{ aluno.user.email }}</p>
+
+            <hr>
+            <h3>Disciplinas</h3>
+            <ul>
+                {% for d in disciplinas %}<li>{{ d.nome }}</li>{% empty %}<li>Nenhuma disciplina cadastrada.</li>{% endfor %}
+            </ul>
+
+            <a href="{% url 'logout'%}">
+                <button>
+                    SAIR
+                </button>
+            </a>
+
+        </div>
+
+    {% elif tipo == 'professor' %}
+        <div class="card">
+            <h2>Prof(a). {{ professor.user.get_full_name }}</h2>
+            <p><strong>Email:</strong> {{ professor.user.email }}</p>
+            
+            <a href="{% url 'logout'%}">
+                <button>
+                    SAIR
+                </button>
+        </div>
+    {% endif %}
+</div>
+<style>
+.perfil-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card {
+    width: 80%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card h2, .card h3 {
+    color: #112D4E;
+}
+
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.card table, .card th, .card td {
+    border: 1px solid #ddd;
+}
+
+.card th, .card td {
+    padding: 8px;
+    text-align: center;
+}
+
+.card hr {
+    margin: 15px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+button{
+    background-color: #112D4E;
+    border-radius: 8px;
+    font-weight: 400;
+}
+</style>
+{% endblock %}

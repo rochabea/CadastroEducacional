@@ -55,6 +55,7 @@ urlpatterns = [
     path('professor/feedbacks/novo/', FeedbackCreateView.as_view(), name='feedback-create'),
     path('professor/feedbacks/', MeusFeedbacksProfessorView.as_view(), name='prof-meus-feedbacks'),
 
+    path('dashboard/professor_perfil_view', views.professor_perfil_view, name='professor_perfil_view'),
     path('dashboard/perfil_view', views.perfil_view, name='perfil_view'),
 
     
