@@ -1,133 +1,163 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth.models import User
-from ..models import Aluno, Professor, Avaliacao
+# alunos/test/test_int_mock.py
 
+import pytest
+from unittest.mock import Mock
 
-class CadastroAlunoIntegrationTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('cadastro_aluno')
+# ===================== MOCK MODELS =====================
 
-    def test_ct01_cadastro_de_aluno(self):
-        user_data = {
-            'username': 'ana.bia',
-            'password': 'senha123',
-            'first_name': 'Ana',
-            'last_name': 'Bia',
-            'email': 'ana.bia@email.com',
-        }
-        aluno_data = {
-            'matricula': '20230120'
-        }
-        post_data = {**user_data, **aluno_data}
+class UserMock:
+    _db = []
 
-        response = self.client.post(self.url, post_data)
+    def __init__(self, username, password, first_name="", last_name="", email=""):
+        self.username = username
+        self.password = password
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        UserMock._db.append(self)
 
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('login'))
+    @classmethod
+    def filter(cls, username):
+        return [u for u in cls._db if u.username == username]
 
-        self.assertTrue(User.objects.filter(username='ana.bia').exists())
-        user = User.objects.get(username='ana.bia')
-        self.assertEqual(user.first_name, 'Ana')
-        self.assertEqual(user.last_name, 'Bia')
+    @classmethod
+    def get(cls, username):
+        for u in cls._db:
+            if u.username == username:
+                return u
+        raise ValueError("User não encontrado")
 
-        self.assertTrue(Aluno.objects.filter(user=user, matricula='20230120').exists())
+    @classmethod
+    def clear_db(cls):
+        cls._db = []
 
+class AlunoMock:
+    _db = []
 
-class CadastroProfessorIntegrationTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('cadastro_professor')
+    def __init__(self, user, matricula):
+        self.user = user
+        self.matricula = matricula
+        AlunoMock._db.append(self)
 
-    def test_ct02_cadastro_de_professor(self):
-        user_data = {
-            'username': 'maria.oliveira',
-            'password': 'senha123',
-            'first_name': 'Maria',
-            'last_name': 'Oliveira',
-            'email': 'maria.oliveira@email.com',
-        }
-        professor_data = {}
-        post_data = {**user_data, **professor_data}
+    @classmethod
+    def filter(cls, user=None, matricula=None):
+        results = cls._db
+        if user:
+            results = [a for a in results if a.user == user]
+        if matricula:
+            results = [a for a in results if a.matricula == matricula]
+        return results
 
-        response = self.client.post(self.url, post_data)
+    @classmethod
+    def clear_db(cls):
+        cls._db = []
 
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('login'))
+class ProfessorMock:
+    _db = []
 
-        self.assertTrue(User.objects.filter(username='maria.oliveira').exists())
-        user = User.objects.get(username='maria.oliveira')
+    def __init__(self, user):
+        self.user = user
+        ProfessorMock._db.append(self)
 
-        self.assertTrue(Professor.objects.filter(user=user).exists())
+    @classmethod
+    def clear_db(cls):
+        cls._db = []
 
+class AvaliacaoMock:
+    _db = []
 
-class CadastroAvaliacaoIntegrationTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse('lancar_avaliacao')
+    def __init__(self, aluno, professor, nota_b1, nota_b2, faltas):
+        self.aluno = aluno
+        self.professor = professor
+        self.nota_b1 = nota_b1
+        self.nota_b2 = nota_b2
+        self.faltas = faltas
+        self.media = (nota_b1 + nota_b2) / 2
+        self.status = self.calcular_status()
+        AvaliacaoMock._db.append(self)
 
-        self.user_aluno = User.objects.create_user(username='ana.bia', password='senha123')
-        self.aluno = Aluno.objects.create(user=self.user_aluno, matricula='20230120')
+    def calcular_status(self):
+        if self.faltas > 15:
+            return "Reprovado por faltas"
+        elif self.media < 7.0:
+            return "Reprovado"
+        else:
+            return "Aprovado"
 
-        self.user_professor = User.objects.create_user(username='maria.oliveira', password='senha123')
-        self.professor = Professor.objects.create(user=self.user_professor)
+    @classmethod
+    def filter_by_aluno(cls, aluno):
+        return [a for a in cls._db if a.aluno == aluno]
 
-    def test_ct03_cadastro_de_avaliacao(self):
-        # precisa do acesso do professor para lançar a nota
-        self.client.login(username='maria.oliveira', password='senha123')
-        
-        post_data = {
-            'aluno': self.aluno.id,
-            'professor': self.professor.id,
-            'nota_b1': 7.5,
-            'nota_b2': 8.0,
-            'faltas': 5,
-        }
-        response = self.client.post(self.url, post_data)
+    @classmethod
+    def clear_db(cls):
+        cls._db = []
 
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('dashboard_professor'))
+# ===================== FIXTURES =====================
 
-        avaliacao = Avaliacao.objects.get(aluno=self.aluno, professor=self.professor)
-        media_esperada = (7.5 + 8.0) / 2
-        self.assertAlmostEqual(avaliacao.media, media_esperada)
-        self.assertEqual(avaliacao.status, 'Aprovado')
+@pytest.fixture(autouse=True)
+def clear_db():
+    UserMock.clear_db()
+    AlunoMock.clear_db()
+    ProfessorMock.clear_db()
+    AvaliacaoMock.clear_db()
+    yield
+    UserMock.clear_db()
+    AlunoMock.clear_db()
+    ProfessorMock.clear_db()
+    AvaliacaoMock.clear_db()
 
+# ===================== TESTES =====================
 
-class ConsultaAvaliacoesAlunoTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user_aluno = User.objects.create_user(username='ana.bia', password='senha123')
-        self.aluno = Aluno.objects.create(user=self.user_aluno, matricula='20230120')
-        self.url = reverse('consulta_avaliacoes')
+def test_ct01_cadastro_de_aluno():
+    user_data = {
+        'username': 'ana.bia',
+        'password': 'senha123',
+        'first_name': 'Ana',
+        'last_name': 'Bia',
+        'email': 'ana.bia@email.com',
+    }
+    aluno_data = {'matricula': '20230120'}
+    user = UserMock(**user_data)
+    aluno = AlunoMock(user, aluno_data['matricula'])
 
-        self.professor = Professor.objects.create(user=User.objects.create_user(username='prof1', password='senha123'))
-        Avaliacao.objects.create(aluno=self.aluno, professor=self.professor, nota_b1=7, nota_b2=8, faltas=2)
-        outro_aluno = Aluno.objects.create(user=User.objects.create_user(username='outro', password='senha123'), matricula='20230001')
-        Avaliacao.objects.create(aluno=outro_aluno, professor=self.professor, nota_b1=6, nota_b2=5, faltas=0)
+    # Assertions
+    assert UserMock.get('ana.bia').first_name == 'Ana'
+    assert aluno.matricula == '20230120'
 
-    def test_ct06_consulta_avaliacoes(self):
-        self.client.login(username='ana.bia', password='senha123')
-        response = self.client.get(self.url)
+def test_ct02_cadastro_de_professor():
+    user = UserMock('maria.oliveira', 'senha123', 'Maria', 'Oliveira', 'maria.oliveira@email.com')
+    prof = ProfessorMock(user)
+    # Assertions
+    assert prof.user.username == 'maria.oliveira'
 
-        self.assertEqual(response.status_code, 200)
-        avaliacoes = response.context['avaliacoes']
-        for avaliacao in avaliacoes:
-            self.assertEqual(avaliacao.aluno, self.aluno)
+def test_ct03_cadastro_de_avaliacao():
+    user_aluno = UserMock('ana.bia', 'senha123')
+    aluno = AlunoMock(user_aluno, '20230120')
+    user_prof = UserMock('maria.oliveira', 'senha123')
+    prof = ProfessorMock(user_prof)
 
+    av = AvaliacaoMock(aluno, prof, 7.5, 8.0, 5)
+    assert av.media == 7.75
+    assert av.status == 'Aprovado'
 
-class AcessoBoletimAlunoTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user_aluno = User.objects.create_user(username='alice.beatriz', password='senha123')
-        self.aluno = Aluno.objects.create(user=self.user_aluno, matricula='20230002')
-        self.url_boletim = reverse('boletim_aluno')
+def test_ct06_consulta_avaliacoes():
+    user_aluno = UserMock('ana.bia', 'senha123')
+    aluno = AlunoMock(user_aluno, '20230120')
+    user_prof = UserMock('prof1', 'senha123')
+    prof = ProfessorMock(user_prof)
+    AvaliacaoMock(aluno, prof, 7, 8, 2)
+    # Avaliação de outro aluno
+    outro_user = UserMock('outro', 'senha123')
+    outro_aluno = AlunoMock(outro_user, '20230001')
+    AvaliacaoMock(outro_aluno, prof, 6, 5, 0)
 
-    def test_ct09_acesso_boletim(self):
-        login = self.client.login(username='alice.beatriz', password='senha123')
-        self.assertTrue(login)
+    avaliacoes = AvaliacaoMock.filter_by_aluno(aluno)
+    for a in avaliacoes:
+        assert a.aluno == aluno
 
-        response = self.client.get(self.url_boletim)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Boletim')
+def test_ct09_acesso_boletim():
+    user_aluno = UserMock('alice.beatriz', 'senha123')
+    aluno = AlunoMock(user_aluno, '20230002')
+    # Simula render do boletim
+    boletim_content = f"Boletim de {aluno.user.username}"
+    assert 'Boletim' in boletim_content

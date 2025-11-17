@@ -1,10 +1,11 @@
 # tests/conftest.py
 import pytest
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from model_bakery import baker
 import sys, types
 
-# --- STUB PARA 'fpdf' EM AMBIENTE DE TESTE (não altera o app) 
+# --- STUB PARA 'fpdf' EM AMBIENTE DE TESTE
 if "fpdf" not in sys.modules:
     fake_fpdf = types.ModuleType("fpdf")
 
@@ -14,17 +15,34 @@ if "fpdf" not in sys.modules:
         def set_font(self, *args, **kwargs): pass
         def cell(self, *args, **kwargs): pass
         def ln(self, *args, **kwargs): pass
-        # fpdf2 retorna str no output(dest='S'); seu código chama .encode('latin-1')
-        def output(self, dest=None):
-            return "PDF"  # string -> .encode(...) funciona
+        def output(self, dest=None): return "PDF"
 
     fake_fpdf.FPDF = FPDF
     sys.modules["fpdf"] = fake_fpdf
 
+# --- DATABASE MOCK: SQLite em memória
+
+@pytest.fixture(autouse=True)
+def override_db_settings(settings):
+    settings.DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+        'OPTIONS': {'check_same_thread': False},
+    }
+    
+@pytest.fixture(scope="session")
+def django_db_setup():
+    from django.conf import settings
+    settings.DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': ':memory:',
+        'OPTIONS': {'check_same_thread': False},
+    }
+
+# --- FIXTURES DE USUÁRIOS E MODELOS
 @pytest.fixture
 def user_staff(db):
     User = get_user_model()
-    # staff pode ser também o professor
     return User.objects.create_user(
         username="staff",
         password="SenhaForte123!",
@@ -37,7 +55,6 @@ def user_staff(db):
 
 @pytest.fixture
 def professor(db, user_staff):
-    # Professor é OneToOne com User
     return baker.make("alunos.Professor", user=user_staff)
 
 @pytest.fixture
@@ -53,19 +70,14 @@ def user_aluno(db):
 
 @pytest.fixture
 def aluno(db, user_aluno):
-    # Aluno é OneToOne com User
     return baker.make("alunos.Aluno", user=user_aluno)
 
 @pytest.fixture
 def disciplina(db):
-    return baker.make("alunos.Disciplina", nome="Matemática")
+    return baker.make("alunos.Disciplina", nome="matematica")
 
 @pytest.fixture
 def avaliacao_factory(db, aluno, professor):
-    """
-    Cria avaliações para (aluno, professor) aceitando tupla de notas (b1,b2) e faltas.
-    Uso: avaliacao_factory(notas=(7.0, 8.0), faltas=2, qtd=1)
-    """
     from alunos.models import Avaliacao
 
     def _factory(notas=(7.0, 7.0), faltas=0, qtd=1):
@@ -84,4 +96,3 @@ def avaliacao_factory(db, aluno, professor):
         return objs
 
     return _factory
-
